@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Казанское Поволжье</name></metadata>
+  <trk>
+    <name>Казанское Поволжье</name>
+    <trkseg>
+      <trkpt lat="55.790020" lon="49.120020">
+        <ele>70</ele>
+        <time>2025-02-25T09:30:00Z</time>
+        <extensions><cadence>111</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.790597" lon="49.120532">
+        <ele>74</ele>
+        <time>2025-02-25T09:36:00Z</time>
+        <extensions><cadence>110</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.791154" lon="49.121059">
+        <ele>77</ele>
+        <time>2025-02-25T09:42:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.791675" lon="49.121609">
+        <ele>79</ele>
+        <time>2025-02-25T09:48:00Z</time>
+        <extensions><cadence>106</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.792153" lon="49.122191">
+        <ele>81</ele>
+        <time>2025-02-25T09:54:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.792588" lon="49.122802">
+        <ele>80</ele>
+        <time>2025-02-25T10:00:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.792989" lon="49.123438">
+        <ele>80</ele>
+        <time>2025-02-25T10:06:00Z</time>
+        <extensions><cadence>101</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.793371" lon="49.124086">
+        <ele>79</ele>
+        <time>2025-02-25T10:12:00Z</time>
+        <extensions><cadence>100</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.793756" lon="49.124733">
+        <ele>78</ele>
+        <time>2025-02-25T10:18:00Z</time>
+        <extensions><cadence>100</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.794161" lon="49.125365">
+        <ele>79</ele>
+        <time>2025-02-25T10:24:00Z</time>
+        <extensions><cadence>101</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.794603" lon="49.125972">
+        <ele>80</ele>
+        <time>2025-02-25T10:30:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.795089" lon="49.126548">
+        <ele>83</ele>
+        <time>2025-02-25T10:36:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.795618" lon="49.127093">
+        <ele>87</ele>
+        <time>2025-02-25T10:42:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.796180" lon="49.127616">
+        <ele>91</ele>
+        <time>2025-02-25T10:48:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="55.796758" lon="49.128128">
+        <ele>94</ele>
+        <time>2025-02-25T10:54:00Z</time>
+        <extensions><cadence>100</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

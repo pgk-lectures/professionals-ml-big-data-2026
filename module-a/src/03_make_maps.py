@@ -7,7 +7,7 @@ from urllib.request import Request, urlopen
 import matplotlib.pyplot as plt
 import numpy as np
 
-from common import MAPS_DIR, TRACKS_DIR, load_manifest, parse_gpx
+from common import MAPS_DIR, TRACKS_DIR, WORK_DIR, load_manifest, parse_gpx
 
 
 TILE_SIZE = 256
@@ -70,9 +70,39 @@ def make_map(track_id, points):
 
 
 def main():
+    created = 0
     for item in load_manifest():
         path = TRACKS_DIR / f"{item['id']}.gpx"
+        if not path.exists():
+            continue
         make_map(item["id"], parse_gpx(path))
+        created += 1
+
+    if created == 0:
+        raise RuntimeError("Нет загруженных GPX. Сначала запустите 01_download_tracks.py")
+
+    legend = """# Легенда топографической карты
+
+Источник: официальная легенда OpenTopoMap — https://opentopomap.org/about
+
+| Категория в датасете | Что ищем на карте/в легенде |
+|---|---|
+| forest | лесные площади: лиственный, хвойный, смешанный лес; зелёные лесные обозначения |
+| wetland | болота, торфяники, камышовые/заболоченные территории |
+| water | реки, озёра и другие водные объекты; синие обозначения |
+| road | дороги, тропы и дорожные линии из раздела «Straßen und Wege» |
+| settlement | населённые пункты и застроенные территории |
+| other | участок, который не удалось уверенно отнести к категориям выше |
+
+В учебном решении OSM/Overpass используется для автоматического поиска объектов,
+а легенда OpenTopoMap — для интерпретации и проверки того, как эти объекты
+отображаются на топографической карте.
+
+На соревновании в отчёте нужно показать несколько конкретных примеров:
+фрагмент карты → обозначение/цвет по легенде → получившийся terrain_type.
+"""
+    (WORK_DIR / "map_legend.md").write_text(legend, encoding="utf-8")
+    print(f"[OK] {WORK_DIR / 'map_legend.md'}")
 
 
 if __name__ == "__main__":

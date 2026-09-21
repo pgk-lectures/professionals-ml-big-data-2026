@@ -1,49 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="pgk-lectures-training"
      xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Бузулукский летний маршрут</name></metadata>
+  <metadata><name>Кинельский маршрут</name></metadata>
   <trk>
-    <name>Бузулукский летний маршрут</name>
+    <name>Кинельский маршрут</name>
     <trkseg>
-      <trkpt lat="52.780000" lon="52.240000">
-        <ele>78</ele>
-        <time>2025-08-09T06:00:00Z</time>
-        <extensions><cadence>124</cadence></extensions>
+      <trkpt lat="53.223030" lon="50.625030">
+        <ele>47</ele>
+        <time>2024-04-20T11:00:00Z</time>
+        <extensions><cadence>117</cadence></extensions>
       </trkpt>
-      <trkpt lat="52.783100" lon="52.244300">
-        <ele>80</ele>
-        <time>2025-08-09T06:10:00Z</time>
-        <extensions><cadence>125</cadence></extensions>
+      <trkpt lat="53.223607" lon="50.625542">
+        <ele>51</ele>
+        <time>2024-04-20T11:06:00Z</time>
+        <extensions><cadence>116</cadence></extensions>
       </trkpt>
-      <trkpt lat="52.786300" lon="52.248700">
-        <ele>82</ele>
-        <time>2025-08-09T06:20:00Z</time>
-        <extensions><cadence>127</cadence></extensions>
+      <trkpt lat="53.224164" lon="50.626069">
+        <ele>54</ele>
+        <time>2024-04-20T11:12:00Z</time>
+        <extensions><cadence>114</cadence></extensions>
       </trkpt>
-      <trkpt lat="52.789400" lon="52.253000">
-        <ele>84</ele>
-        <time>2025-08-09T06:30:00Z</time>
-        <extensions><cadence>128</cadence></extensions>
+      <trkpt lat="53.224685" lon="50.626619">
+        <ele>56</ele>
+        <time>2024-04-20T11:18:00Z</time>
+        <extensions><cadence>112</cadence></extensions>
       </trkpt>
-      <trkpt lat="52.792600" lon="52.257400">
-        <ele>86</ele>
-        <time>2025-08-09T06:40:00Z</time>
-        <extensions><cadence>126</cadence></extensions>
+      <trkpt lat="53.225163" lon="50.627201">
+        <ele>58</ele>
+        <time>2024-04-20T11:24:00Z</time>
+        <extensions><cadence>110</cadence></extensions>
       </trkpt>
-      <trkpt lat="52.795700" lon="52.261800">
-        <ele>89</ele>
-        <time>2025-08-09T06:50:00Z</time>
-        <extensions><cadence>123</cadence></extensions>
+      <trkpt lat="53.225598" lon="50.627812">
+        <ele>57</ele>
+        <time>2024-04-20T11:30:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
       </trkpt>
-      <trkpt lat="52.798900" lon="52.266200">
-        <ele>91</ele>
-        <time>2025-08-09T07:00:00Z</time>
-        <extensions><cadence>121</cadence></extensions>
+      <trkpt lat="53.225999" lon="50.628448">
+        <ele>57</ele>
+        <time>2024-04-20T11:36:00Z</time>
+        <extensions><cadence>107</cadence></extensions>
       </trkpt>
-      <trkpt lat="52.802000" lon="52.270600">
-        <ele>94</ele>
-        <time>2025-08-09T07:10:00Z</time>
-        <extensions><cadence>120</cadence></extensions>
+      <trkpt lat="53.226381" lon="50.629096">
+        <ele>56</ele>
+        <time>2024-04-20T11:42:00Z</time>
+        <extensions><cadence>106</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.226766" lon="50.629743">
+        <ele>55</ele>
+        <time>2024-04-20T11:48:00Z</time>
+        <extensions><cadence>106</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.227171" lon="50.630375">
+        <ele>56</ele>
+        <time>2024-04-20T11:54:00Z</time>
+        <extensions><cadence>107</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.227613" lon="50.630982">
+        <ele>57</ele>
+        <time>2024-04-20T12:00:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.228099" lon="50.631558">
+        <ele>60</ele>
+        <time>2024-04-20T12:06:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.228628" lon="50.632103">
+        <ele>64</ele>
+        <time>2024-04-20T12:12:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.229190" lon="50.632626">
+        <ele>68</ele>
+        <time>2024-04-20T12:18:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.229768" lon="50.633138">
+        <ele>71</ele>
+        <time>2024-04-20T12:24:00Z</time>
+        <extensions><cadence>106</cadence></extensions>
       </trkpt>
     </trkseg>
   </trk>

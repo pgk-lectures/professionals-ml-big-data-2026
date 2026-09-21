@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Кинельский маршрут</name></metadata>
+  <trk>
+    <name>Кинельский маршрут</name>
+    <trkseg>
+      <trkpt lat="53.223130" lon="50.625130">
+        <ele>47</ele>
+        <time>2024-07-20T14:00:00Z</time>
+        <extensions><cadence>124</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.223707" lon="50.625642">
+        <ele>51</ele>
+        <time>2024-07-20T14:06:00Z</time>
+        <extensions><cadence>123</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.224264" lon="50.626169">
+        <ele>54</ele>
+        <time>2024-07-20T14:12:00Z</time>
+        <extensions><cadence>121</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.224785" lon="50.626719">
+        <ele>56</ele>
+        <time>2024-07-20T14:18:00Z</time>
+        <extensions><cadence>119</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.225263" lon="50.627301">
+        <ele>58</ele>
+        <time>2024-07-20T14:24:00Z</time>
+        <extensions><cadence>117</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.225698" lon="50.627912">
+        <ele>57</ele>
+        <time>2024-07-20T14:30:00Z</time>
+        <extensions><cadence>115</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.226099" lon="50.628548">
+        <ele>57</ele>
+        <time>2024-07-20T14:36:00Z</time>
+        <extensions><cadence>114</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.226481" lon="50.629196">
+        <ele>56</ele>
+        <time>2024-07-20T14:42:00Z</time>
+        <extensions><cadence>113</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.226866" lon="50.629843">
+        <ele>55</ele>
+        <time>2024-07-20T14:48:00Z</time>
+        <extensions><cadence>113</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.227271" lon="50.630475">
+        <ele>56</ele>
+        <time>2024-07-20T14:54:00Z</time>
+        <extensions><cadence>114</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.227713" lon="50.631082">
+        <ele>57</ele>
+        <time>2024-07-20T15:00:00Z</time>
+        <extensions><cadence>115</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.228199" lon="50.631658">
+        <ele>60</ele>
+        <time>2024-07-20T15:06:00Z</time>
+        <extensions><cadence>115</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.228728" lon="50.632203">
+        <ele>64</ele>
+        <time>2024-07-20T15:12:00Z</time>
+        <extensions><cadence>115</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.229290" lon="50.632726">
+        <ele>68</ele>
+        <time>2024-07-20T15:18:00Z</time>
+        <extensions><cadence>115</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.229868" lon="50.633238">
+        <ele>71</ele>
+        <time>2024-07-20T15:24:00Z</time>
+        <extensions><cadence>113</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

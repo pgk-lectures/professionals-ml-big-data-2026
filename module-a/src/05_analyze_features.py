@@ -39,18 +39,43 @@ def main():
     dt = pd.to_datetime(df["timestamp"], errors="coerce", utc=True)
 
     df["month"] = dt.dt.month
+    df["hour"] = dt.dt.hour
     df["season"] = df["month"].map(lambda x: season(int(x)) if pd.notna(x) else "unknown")
+    df["time_of_day"] = pd.cut(
+        df["hour"],
+        bins=[-1, 5, 11, 17, 23],
+        labels=["night", "morning", "day", "evening"],
+    )
     df["elevation_band"] = pd.cut(
         df["elevation"],
         bins=[-np.inf, 100, 200, 400, np.inf],
         labels=["low", "medium", "high", "very_high"],
     )
 
+    objects = df["nearby_objects"].fillna("").astype(str)
+    df["has_water"] = objects.str.contains("waterway=|natural=water|amenity=drinking_water", regex=True).astype(int)
+    df["has_road"] = objects.str.contains("highway=", regex=False).astype(int)
+    df["has_settlement"] = objects.str.contains("place=", regex=False).astype(int)
+    df["has_wetland"] = objects.str.contains("natural=wetland", regex=False).astype(int)
+    df["nearby_object_count"] = objects.map(lambda value: 0 if not value else len(value.split(";")))
+
     enriched = WORK_DIR / "dataset_enriched.csv"
     df.to_csv(enriched, index=False)
 
-    numeric_cols = ["cadence", "elevation", "temperature"]
-    corr = df[numeric_cols].corr(numeric_only=True)
+    correlation_cols = [
+        "latitude",
+        "longitude",
+        "cadence",
+        "elevation",
+        "temperature",
+        "humidity",
+        "precipitation",
+        "wind_speed",
+        "hour",
+        "nearby_object_count",
+    ]
+    distribution_cols = ["cadence", "elevation", "temperature", "humidity", "precipitation", "wind_speed"]
+    corr = df[correlation_cols].corr(numeric_only=True)
 
     fig, ax = plt.subplots(figsize=(6, 5))
     image = ax.imshow(corr.values, vmin=-1, vmax=1)
@@ -68,25 +93,40 @@ def main():
 
 | Поле | Расшифровка | Единицы | Назначение |
 |---|---|---|---|
-| track_id | идентификатор маршрута | — | связь точек одного трека |
+| track_id | идентификатор конкретного прохождения маршрута | — | связь точек одного трека |
+| track_name | название маршрута | — | группировка повторных прохождений одного маршрута |
+| source | тип источника: provided/additional | категория | отделяет исходные треки от добавленных |
+| popularity_score | учебный показатель популярности маршрута | 0–100 | тренировка анализа популярных маршрутов в модуле Б |
 | date | дата маршрута | дата | сезонность |
 | region | регион | — | географическая группировка |
+| point_index | порядковый номер точки в треке | номер | уникальность и порядок точек |
+| timestamp | дата и время GPS-точки | UTC | анализ времени суток и погоды |
 | latitude | широта | градусы | координата |
 | longitude | долгота | градусы | координата |
 | cadence | частота шагов | шаг/мин | активность туриста |
 | elevation | высота над уровнем моря | м | характеристика рельефа |
-| temperature | температура воздуха | °C | погодные условия |
+| temperature | температура воздуха | °C | обязательный погодный признак |
+| humidity | относительная влажность | % | дополнительный признак для пожароопасности |
+| precipitation | осадки | мм | дополнительный признак для затоплений |
+| wind_speed | скорость ветра | км/ч | дополнительный признак для пожароопасности |
 | terrain_type | тип местности | категория | характеристика окружения |
-| nearby_objects | объекты в радиусе 500 м | список | контекст точки |
-| month | месяц | 1–12 | всесезонность |
+| nearby_objects | объекты в радиусе 500 м | список | географический контекст точки |
+| has_water | есть вода рядом | 0/1 | признак для анализа рисков |
+| has_road | есть дорога/тропа рядом | 0/1 | признак доступности и эвакуации |
+| has_settlement | есть населённый пункт рядом | 0/1 | признак доступности и эвакуации |
+| has_wetland | есть заболоченная территория рядом | 0/1 | признак риска подтопления |
+| nearby_object_count | количество типов объектов рядом | шт. | насыщенность окружения |
+| month | месяц | 1–12 | сезонная аналитика |
+| hour | час суток | 0–23 | анализ температуры и активности по времени суток |
 | season | сезон | категория | всесезонность |
+| time_of_day | часть суток | категория | фильтрация и аналитика в модуле Б |
 | elevation_band | высотная категория | категория | упрощённая характеристика рельефа |
 """
     (WORK_DIR / "data_dictionary.md").write_text(dictionary, encoding="utf-8")
 
     conclusions = ["# Проверка распределений", ""]
 
-    for column in numeric_cols:
+    for column in distribution_cols:
         values = pd.to_numeric(df[column], errors="coerce").dropna()
         if values.empty:
             continue
