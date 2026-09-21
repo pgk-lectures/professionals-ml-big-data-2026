@@ -70,9 +70,16 @@ def make_map(track_id, points):
 
 
 def main():
+    created = 0
     for item in load_manifest():
         path = TRACKS_DIR / f"{item['id']}.gpx"
+        if not path.exists():
+            continue
         make_map(item["id"], parse_gpx(path))
+        created += 1
+
+    if created == 0:
+        raise RuntimeError("Нет загруженных GPX. Сначала запустите 01_download_tracks.py")
 
 
 if __name__ == "__main__":
