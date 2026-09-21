@@ -52,11 +52,29 @@ def main():
         labels=["low", "medium", "high", "very_high"],
     )
 
+    objects = df["nearby_objects"].fillna("").astype(str)
+    df["has_water"] = objects.str.contains("waterway=|natural=water|amenity=drinking_water", regex=True).astype(int)
+    df["has_road"] = objects.str.contains("highway=", regex=False).astype(int)
+    df["has_settlement"] = objects.str.contains("place=", regex=False).astype(int)
+    df["has_wetland"] = objects.str.contains("natural=wetland", regex=False).astype(int)
+    df["nearby_object_count"] = objects.map(lambda value: 0 if not value else len(value.split(";")))
+
     enriched = WORK_DIR / "dataset_enriched.csv"
     df.to_csv(enriched, index=False)
 
-    correlation_cols = ["latitude", "longitude", "cadence", "elevation", "temperature", "hour"]
-    distribution_cols = ["cadence", "elevation", "temperature"]
+    correlation_cols = [
+        "latitude",
+        "longitude",
+        "cadence",
+        "elevation",
+        "temperature",
+        "humidity",
+        "precipitation",
+        "wind_speed",
+        "hour",
+        "nearby_object_count",
+    ]
+    distribution_cols = ["cadence", "elevation", "temperature", "humidity", "precipitation", "wind_speed"]
     corr = df[correlation_cols].corr(numeric_only=True)
 
     fig, ax = plt.subplots(figsize=(6, 5))
@@ -86,9 +104,17 @@ def main():
 | longitude | долгота | градусы | координата |
 | cadence | частота шагов | шаг/мин | активность туриста |
 | elevation | высота над уровнем моря | м | характеристика рельефа |
-| temperature | температура воздуха | °C | погодные условия |
+| temperature | температура воздуха | °C | обязательный погодный признак |
+| humidity | относительная влажность | % | дополнительный признак для пожароопасности |
+| precipitation | осадки | мм | дополнительный признак для затоплений |
+| wind_speed | скорость ветра | км/ч | дополнительный признак для пожароопасности |
 | terrain_type | тип местности | категория | характеристика окружения |
 | nearby_objects | объекты в радиусе 500 м | список | географический контекст точки |
+| has_water | есть вода рядом | 0/1 | признак для анализа рисков |
+| has_road | есть дорога/тропа рядом | 0/1 | признак доступности и эвакуации |
+| has_settlement | есть населённый пункт рядом | 0/1 | признак доступности и эвакуации |
+| has_wetland | есть заболоченная территория рядом | 0/1 | признак риска подтопления |
+| nearby_object_count | количество типов объектов рядом | шт. | насыщенность окружения |
 | month | месяц | 1–12 | сезонная аналитика |
 | hour | час суток | 0–23 | анализ температуры и активности по времени суток |
 | season | сезон | категория | всесезонность |
