@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Бузулукский летний маршрут</name></metadata>
+  <trk>
+    <name>Бузулукский летний маршрут</name>
+    <trkseg>
+      <trkpt lat="52.780000" lon="52.240000">
+        <ele>78</ele>
+        <time>2025-08-09T06:00:00Z</time>
+        <extensions><cadence>124</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.783100" lon="52.244300">
+        <ele>80</ele>
+        <time>2025-08-09T06:10:00Z</time>
+        <extensions><cadence>125</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.786300" lon="52.248700">
+        <ele>82</ele>
+        <time>2025-08-09T06:20:00Z</time>
+        <extensions><cadence>127</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.789400" lon="52.253000">
+        <ele>84</ele>
+        <time>2025-08-09T06:30:00Z</time>
+        <extensions><cadence>128</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.792600" lon="52.257400">
+        <ele>86</ele>
+        <time>2025-08-09T06:40:00Z</time>
+        <extensions><cadence>126</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.795700" lon="52.261800">
+        <ele>89</ele>
+        <time>2025-08-09T06:50:00Z</time>
+        <extensions><cadence>123</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.798900" lon="52.266200">
+        <ele>91</ele>
+        <time>2025-08-09T07:00:00Z</time>
+        <extensions><cadence>121</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.802000" lon="52.270600">
+        <ele>94</ele>
+        <time>2025-08-09T07:10:00Z</time>
+        <extensions><cadence>120</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
