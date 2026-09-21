@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Кинельский летний маршрут</name></metadata>
+  <trk>
+    <name>Кинельский летний маршрут</name>
+    <trkseg>
+      <trkpt lat="53.223000" lon="50.625000">
+        <ele>47</ele>
+        <time>2025-07-20T06:30:00Z</time>
+        <extensions><cadence>121</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.226200" lon="50.629400">
+        <ele>49</ele>
+        <time>2025-07-20T06:40:00Z</time>
+        <extensions><cadence>123</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.229500" lon="50.633800">
+        <ele>52</ele>
+        <time>2025-07-20T06:50:00Z</time>
+        <extensions><cadence>126</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.232800" lon="50.638000">
+        <ele>55</ele>
+        <time>2025-07-20T07:00:00Z</time>
+        <extensions><cadence>124</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.236100" lon="50.642200">
+        <ele>57</ele>
+        <time>2025-07-20T07:10:00Z</time>
+        <extensions><cadence>122</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.239400" lon="50.646400">
+        <ele>61</ele>
+        <time>2025-07-20T07:20:00Z</time>
+        <extensions><cadence>119</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.242600" lon="50.650600">
+        <ele>64</ele>
+        <time>2025-07-20T07:30:00Z</time>
+        <extensions><cadence>117</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.245800" lon="50.654800">
+        <ele>67</ele>
+        <time>2025-07-20T07:40:00Z</time>
+        <extensions><cadence>116</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
