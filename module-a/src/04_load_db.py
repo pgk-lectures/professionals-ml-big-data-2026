@@ -57,7 +57,7 @@ def main():
                     """
                     INSERT INTO route_points (
                         track_id, point_index, point_time, latitude, longitude,
-                        cadence, elevation, temperature, humidity, precipitation, wind_speed,
+                        cadence, popularity_score, elevation, temperature, humidity, precipitation, wind_speed,
                         terrain_type, nearby_objects,
                         month, hour, season, time_of_day, elevation_band,
                         has_water, has_road, has_settlement, has_wetland, nearby_object_count,
@@ -65,7 +65,7 @@ def main():
                     )
                     VALUES (
                         %s, %s, %s, %s, %s,
-                        %s, %s, %s, %s, %s, %s,
+                        %s, %s, %s, %s, %s, %s, %s,
                         %s, %s,
                         %s, %s, %s, %s, %s,
                         %s, %s, %s, %s, %s,
@@ -76,6 +76,7 @@ def main():
                         latitude = EXCLUDED.latitude,
                         longitude = EXCLUDED.longitude,
                         cadence = EXCLUDED.cadence,
+                        popularity_score = EXCLUDED.popularity_score,
                         elevation = EXCLUDED.elevation,
                         temperature = EXCLUDED.temperature,
                         humidity = EXCLUDED.humidity,
@@ -102,6 +103,7 @@ def main():
                         float(row.latitude),
                         float(row.longitude),
                         optional(row, "cadence"),
+                        optional(row, "popularity_score"),
                         optional(row, "elevation"),
                         optional(row, "temperature"),
                         optional(row, "humidity"),
