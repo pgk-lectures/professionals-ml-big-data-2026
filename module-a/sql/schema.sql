@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS route_points (
     latitude DOUBLE PRECISION NOT NULL,
     longitude DOUBLE PRECISION NOT NULL,
     cadence DOUBLE PRECISION,
+    popularity_score DOUBLE PRECISION,
     elevation DOUBLE PRECISION,
     temperature DOUBLE PRECISION,
     humidity DOUBLE PRECISION,
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS route_points (
 );
 
 -- Позволяет безопасно обновить БД, если таблица была создана старой версией практики.
+ALTER TABLE route_points ADD COLUMN IF NOT EXISTS popularity_score DOUBLE PRECISION;
 ALTER TABLE route_points ADD COLUMN IF NOT EXISTS humidity DOUBLE PRECISION;
 ALTER TABLE route_points ADD COLUMN IF NOT EXISTS precipitation DOUBLE PRECISION;
 ALTER TABLE route_points ADD COLUMN IF NOT EXISTS wind_speed DOUBLE PRECISION;
