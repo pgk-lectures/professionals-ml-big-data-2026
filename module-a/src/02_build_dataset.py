@@ -18,7 +18,9 @@ def get_json(url: str):
 
 
 def elevation(lat: float, lon: float, fallback):
-    key = f"elev_{lat:.5f}_{lon:.5f}"
+    # Рельеф меняется заметно медленнее, чем GPS-координаты.
+    # Кэшируем примерно по сетке ~100 м, чтобы не перегружать внешний API.
+    key = f"elev_{lat:.3f}_{lon:.3f}"
 
     def producer():
         query = urlencode({"latitude": lat, "longitude": lon})
@@ -39,9 +41,13 @@ def elevation(lat: float, lon: float, fallback):
 def temperature(lat: float, lon: float, timestamp: str | None):
     if not timestamp:
         return None
+
     dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
     date = dt.date().isoformat()
-    key = f"weather_{lat:.4f}_{lon:.4f}_{date}"
+
+    # Погодные сетки грубее GPS-точек, поэтому соседние точки маршрута
+    # безопасно используют один закэшированный погодный ответ.
+    key = f"weather_{lat:.2f}_{lon:.2f}_{date}"
 
     def producer():
         query = urlencode(
@@ -69,21 +75,35 @@ def temperature(lat: float, lon: float, timestamp: str | None):
         return None
 
 
-def overpass_objects(lat: float, lon: float):
-    key = f"osm_{lat:.4f}_{lon:.4f}"
+def route_osm_objects(track_id: str, points):
+    """
+    Один запрос Overpass на весь маршрут, затем локально отбираем
+    объекты в радиусе 500 м для каждой точки.
+    """
+    key = f"osm_route_{track_id}"
 
     def producer():
+        lats = [p["latitude"] for p in points]
+        lons = [p["longitude"] for p in points]
+
+        # Запас больше 500 м, чтобы не потерять объекты возле крайних точек.
+        south = min(lats) - 0.01
+        north = max(lats) + 0.01
+        west = min(lons) - 0.015
+        east = max(lons) + 0.015
+
+        bbox = f"{south},{west},{north},{east}"
         query = f"""
 [out:json][timeout:25];
 (
-  nwr(around:500,{lat},{lon})["natural"];
-  nwr(around:500,{lat},{lon})["landuse"];
-  nwr(around:500,{lat},{lon})["highway"];
-  nwr(around:500,{lat},{lon})["waterway"];
-  nwr(around:500,{lat},{lon})["place"];
-  nwr(around:500,{lat},{lon})["amenity"="drinking_water"];
+  nwr({bbox})["natural"];
+  nwr({bbox})["landuse"];
+  nwr({bbox})["highway"];
+  nwr({bbox})["waterway"];
+  nwr({bbox})["place"];
+  nwr({bbox})["amenity"="drinking_water"];
 );
-out tags center 50;
+out tags center;
 """
         url = "https://overpass-api.de/api/interpreter?" + urlencode({"data": query})
         return get_json(url)
@@ -91,8 +111,40 @@ out tags center 50;
     try:
         return cache_json(key, producer).get("elements", [])
     except Exception as exc:
-        print(f"[WARN] overpass {lat},{lon}: {exc}")
+        print(f"[WARN] overpass {track_id}: {exc}")
         return []
+
+
+def element_position(element):
+    if "lat" in element and "lon" in element:
+        return float(element["lat"]), float(element["lon"])
+    center = element.get("center")
+    if center and "lat" in center and "lon" in center:
+        return float(center["lat"]), float(center["lon"])
+    return None
+
+
+def haversine_m(lat1, lon1, lat2, lon2):
+    radius = 6_371_000.0
+    p1 = math.radians(lat1)
+    p2 = math.radians(lat2)
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+
+    a = math.sin(dlat / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlon / 2) ** 2
+    return 2 * radius * math.asin(math.sqrt(a))
+
+
+def objects_within_500m(elements, lat, lon):
+    result = []
+    for element in elements:
+        position = element_position(element)
+        if not position:
+            continue
+        obj_lat, obj_lon = position
+        if haversine_m(lat, lon, obj_lat, obj_lon) <= 500:
+            result.append(element)
+    return result
 
 
 def classify(elements):
@@ -124,17 +176,22 @@ def classify(elements):
 
 def main():
     rows = []
+    processed_tracks = 0
 
     for item in load_manifest():
         path = TRACKS_DIR / f"{item['id']}.gpx"
         if not path.exists():
-            raise FileNotFoundError(f"Нет {path}. Сначала запустите 01_download_tracks.py")
+            continue
 
-        for point in parse_gpx(path):
+        points = parse_gpx(path)
+        osm_for_route = route_osm_objects(item["id"], points)
+        processed_tracks += 1
+
+        for point in points:
             lat = point["latitude"]
             lon = point["longitude"]
-            osm = overpass_objects(lat, lon)
-            terrain, objects = classify(osm)
+            nearby = objects_within_500m(osm_for_route, lat, lon)
+            terrain, objects = classify(nearby)
 
             rows.append(
                 {
@@ -155,9 +212,13 @@ def main():
                 }
             )
 
+    if not rows:
+        raise RuntimeError("Нет загруженных GPX. Сначала запустите 01_download_tracks.py")
+
     df = pd.DataFrame(rows)
     target = WORK_DIR / "dataset.csv"
     df.to_csv(target, index=False)
+    print(f"[OK] обработано маршрутов: {processed_tracks}")
     print(f"[OK] {target}: {len(df)} строк")
     print(df.head().to_string(index=False))
 
