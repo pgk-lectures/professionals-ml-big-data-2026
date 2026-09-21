@@ -1,0 +1,12 @@
+name: professionals-ml
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - pip
+  - pip:
+      - psycopg2-binary

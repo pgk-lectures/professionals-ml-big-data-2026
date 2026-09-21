@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Ульяновский весенний маршрут</name></metadata>
+  <trk>
+    <name>Ульяновский весенний маршрут</name>
+    <trkseg>
+      <trkpt lat="54.300000" lon="48.320000">
+        <ele>104</ele>
+        <time>2025-05-18T08:15:00Z</time>
+        <extensions><cadence>115</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.303000" lon="48.324200">
+        <ele>110</ele>
+        <time>2025-05-18T08:25:00Z</time>
+        <extensions><cadence>116</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.306100" lon="48.328500">
+        <ele>116</ele>
+        <time>2025-05-18T08:35:00Z</time>
+        <extensions><cadence>118</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.309200" lon="48.332900">
+        <ele>123</ele>
+        <time>2025-05-18T08:45:00Z</time>
+        <extensions><cadence>117</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.312300" lon="48.337300">
+        <ele>129</ele>
+        <time>2025-05-18T08:55:00Z</time>
+        <extensions><cadence>114</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.315400" lon="48.341600">
+        <ele>136</ele>
+        <time>2025-05-18T09:05:00Z</time>
+        <extensions><cadence>112</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.318400" lon="48.346000">
+        <ele>142</ele>
+        <time>2025-05-18T09:15:00Z</time>
+        <extensions><cadence>110</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.321400" lon="48.350400">
+        <ele>149</ele>
+        <time>2025-05-18T09:25:00Z</time>
+        <extensions><cadence>109</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

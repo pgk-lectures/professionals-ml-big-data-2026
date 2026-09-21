@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Жигулёвский зимний маршрут</name></metadata>
+  <trk>
+    <name>Жигулёвский зимний маршрут</name>
+    <trkseg>
+      <trkpt lat="53.402100" lon="49.926200">
+        <ele>125</ele>
+        <time>2025-01-15T08:00:00Z</time>
+        <extensions><cadence>101</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.405000" lon="49.930500">
+        <ele>138</ele>
+        <time>2025-01-15T08:10:00Z</time>
+        <extensions><cadence>103</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.408200" lon="49.935000">
+        <ele>154</ele>
+        <time>2025-01-15T08:20:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.411600" lon="49.939100">
+        <ele>171</ele>
+        <time>2025-01-15T08:30:00Z</time>
+        <extensions><cadence>98</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.415200" lon="49.943000">
+        <ele>188</ele>
+        <time>2025-01-15T08:40:00Z</time>
+        <extensions><cadence>95</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.418600" lon="49.946800">
+        <ele>203</ele>
+        <time>2025-01-15T08:50:00Z</time>
+        <extensions><cadence>93</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.421800" lon="49.951100">
+        <ele>219</ele>
+        <time>2025-01-15T09:00:00Z</time>
+        <extensions><cadence>91</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.425000" lon="49.955400">
+        <ele>231</ele>
+        <time>2025-01-15T09:10:00Z</time>
+        <extensions><cadence>90</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
