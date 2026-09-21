@@ -38,16 +38,21 @@ def elevation(lat: float, lon: float, fallback):
         return fallback
 
 
-def temperature(lat: float, lon: float, timestamp: str | None):
+def weather(lat: float, lon: float, timestamp: str | None):
     if not timestamp:
-        return None
+        return {
+            "temperature": None,
+            "humidity": None,
+            "precipitation": None,
+            "wind_speed": None,
+        }
 
     dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
     date = dt.date().isoformat()
 
     # Погодные сетки грубее GPS-точек, поэтому соседние точки маршрута
-    # безопасно используют один закэшированный погодный ответ.
-    key = f"weather_{lat:.2f}_{lon:.2f}_{date}"
+    # используют один закэшированный погодный ответ.
+    key = f"weather_v2_{lat:.2f}_{lon:.2f}_{date}"
 
     def producer():
         query = urlencode(
@@ -56,7 +61,7 @@ def temperature(lat: float, lon: float, timestamp: str | None):
                 "longitude": lon,
                 "start_date": date,
                 "end_date": date,
-                "hourly": "temperature_2m",
+                "hourly": "temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m",
                 "timezone": "UTC",
             }
         )
@@ -64,15 +69,37 @@ def temperature(lat: float, lon: float, timestamp: str | None):
 
     try:
         data = cache_json(key, producer)
-        times = data.get("hourly", {}).get("time", [])
-        values = data.get("hourly", {}).get("temperature_2m", [])
+        hourly = data.get("hourly", {})
+        times = hourly.get("time", [])
         wanted = dt.strftime("%Y-%m-%dT%H:00")
+
         if wanted in times:
-            return values[times.index(wanted)]
-        return values[0] if values else None
+            index = times.index(wanted)
+        elif times:
+            index = 0
+        else:
+            index = None
+
+        def value(name):
+            values = hourly.get(name, [])
+            if index is None or index >= len(values):
+                return None
+            return values[index]
+
+        return {
+            "temperature": value("temperature_2m"),
+            "humidity": value("relative_humidity_2m"),
+            "precipitation": value("precipitation"),
+            "wind_speed": value("wind_speed_10m"),
+        }
     except Exception as exc:
         print(f"[WARN] weather {lat},{lon}: {exc}")
-        return None
+        return {
+            "temperature": None,
+            "humidity": None,
+            "precipitation": None,
+            "wind_speed": None,
+        }
 
 
 def route_osm_objects(track_id: str, points):
@@ -192,6 +219,7 @@ def main():
             lon = point["longitude"]
             nearby = objects_within_500m(osm_for_route, lat, lon)
             terrain, objects = classify(nearby)
+            weather_data = weather(lat, lon, point["timestamp"])
 
             rows.append(
                 {
@@ -206,7 +234,10 @@ def main():
                     "longitude": lon,
                     "cadence": point["cadence"],
                     "elevation": elevation(lat, lon, point["gpx_elevation"]),
-                    "temperature": temperature(lat, lon, point["timestamp"]),
+                    "temperature": weather_data["temperature"],
+                    "humidity": weather_data["humidity"],
+                    "precipitation": weather_data["precipitation"],
+                    "wind_speed": weather_data["wind_speed"],
                     "terrain_type": terrain,
                     "nearby_objects": objects,
                 }
