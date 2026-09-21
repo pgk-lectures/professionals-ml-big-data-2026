@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-python src/01_download_tracks.py
+python src/01_download_tracks.py --source all
 python src/02_build_dataset.py
 python src/03_make_maps.py
 python src/04_load_db.py
