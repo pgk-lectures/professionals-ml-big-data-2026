@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import pandas as pd
 
-from common import AUG_DIR, MAPS_DIR, WORK_DIR, load_manifest
+from common import AUG_DIR, MAPS_DIR, TRACKS_DIR, WORK_DIR, load_manifest
 
 
 def main():
     dataset = pd.read_csv(WORK_DIR / "dataset_enriched.csv")
-    manifest = load_manifest()
+    manifest = [
+        item
+        for item in load_manifest()
+        if (TRACKS_DIR / f"{item['id']}.gpx").exists()
+    ]
 
     map_files = sorted(p.name for p in MAPS_DIR.glob("*.png"))
     aug_files = sorted(p.name for p in AUG_DIR.glob("*.png"))
@@ -22,7 +26,7 @@ def main():
 
 ## 2. Результат
 
-- маршрутов в манифесте: {len(manifest)};
+- загружено маршрутов: {len(manifest)};
 - точек в датасете: {len(dataset)};
 - карт с маршрутами: {len(map_files)};
 - аугментированных изображений: {len(aug_files)};
