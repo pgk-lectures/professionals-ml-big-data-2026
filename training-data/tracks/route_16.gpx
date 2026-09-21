@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Ульяновская Волга</name></metadata>
+  <trk>
+    <name>Ульяновская Волга</name>
+    <trkseg>
+      <trkpt lat="54.300140" lon="48.320140">
+        <ele>104</ele>
+        <time>2025-11-15T07:00:00Z</time>
+        <extensions><cadence>113</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.300717" lon="48.320652">
+        <ele>108</ele>
+        <time>2025-11-15T07:06:00Z</time>
+        <extensions><cadence>112</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.301274" lon="48.321179">
+        <ele>111</ele>
+        <time>2025-11-15T07:12:00Z</time>
+        <extensions><cadence>110</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.301795" lon="48.321729">
+        <ele>113</ele>
+        <time>2025-11-15T07:18:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.302273" lon="48.322311">
+        <ele>115</ele>
+        <time>2025-11-15T07:24:00Z</time>
+        <extensions><cadence>106</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.302708" lon="48.322922">
+        <ele>114</ele>
+        <time>2025-11-15T07:30:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.303109" lon="48.323558">
+        <ele>114</ele>
+        <time>2025-11-15T07:36:00Z</time>
+        <extensions><cadence>103</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.303491" lon="48.324206">
+        <ele>113</ele>
+        <time>2025-11-15T07:42:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.303876" lon="48.324853">
+        <ele>112</ele>
+        <time>2025-11-15T07:48:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.304281" lon="48.325485">
+        <ele>113</ele>
+        <time>2025-11-15T07:54:00Z</time>
+        <extensions><cadence>103</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.304723" lon="48.326092">
+        <ele>114</ele>
+        <time>2025-11-15T08:00:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.305209" lon="48.326668">
+        <ele>117</ele>
+        <time>2025-11-15T08:06:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.305738" lon="48.327213">
+        <ele>121</ele>
+        <time>2025-11-15T08:12:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.306300" lon="48.327736">
+        <ele>125</ele>
+        <time>2025-11-15T08:18:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+      <trkpt lat="54.306878" lon="48.328248">
+        <ele>128</ele>
+        <time>2025-11-15T08:24:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
