@@ -59,9 +59,19 @@ def main():
 
 {chr(10).join(f"- work/maps/{name}" for name in map_files)}
 
+## 6.1 Легенда и интерпретация карты
+
+Использована официальная легенда OpenTopoMap: https://opentopomap.org/about
+
+Подготовлен отдельный файл `work/map_legend.md`, где зафиксировано соответствие
+категорий forest / wetland / water / road / settlement условным обозначениям карты.
+
+Для защиты критерия нужно показать эксперту несколько конкретных примеров:
+фрагмент карты → обозначение/цвет по легенде → значение terrain_type.
+
 ## 7. Предобработка
 
-Добавлены признаки month, season и elevation_band.
+Добавлены признаки month, hour, season, time_of_day и elevation_band.
 Корреляционная матрица сохранена в work/correlation.png.
 Описание полей: work/data_dictionary.md.
 Проверка распределений: work/conclusions.md и work/distributions/.
