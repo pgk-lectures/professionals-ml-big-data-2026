@@ -255,8 +255,26 @@ def main():
     df = pd.DataFrame(rows)
     target = WORK_DIR / "dataset.csv"
     df.to_csv(target, index=False)
+
+    required = [
+        "track_id",
+        "date",
+        "region",
+        "latitude",
+        "longitude",
+        "cadence",
+        "elevation",
+        "temperature",
+        "terrain_type",
+        "nearby_objects",
+    ]
+    missing = df[required].isna().sum()
+
     print(f"[OK] обработано маршрутов: {processed_tracks}")
     print(f"[OK] {target}: {len(df)} строк")
+    print("[INFO] пропуски в обязательных полях:")
+    print(missing.to_string())
+    print()
     print(df.head().to_string(index=False))
 
 
