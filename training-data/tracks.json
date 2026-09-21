@@ -1,50 +1,182 @@
 [
   {
     "id": "route_01",
-    "name": "Жигулёвский зимний маршрут",
+    "name": "Самарская Лука",
     "region": "Самарская область",
-    "date": "2025-01-15",
+    "date": "2024-01-20",
+    "season": "winter",
     "source": "provided",
     "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_01.gpx"
   },
   {
     "id": "route_02",
-    "name": "Самарская Лука весной",
+    "name": "Самарская Лука",
     "region": "Самарская область",
-    "date": "2025-04-10",
+    "date": "2024-04-20",
+    "season": "spring",
     "source": "provided",
     "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_02.gpx"
   },
   {
     "id": "route_03",
-    "name": "Кинельский летний маршрут",
+    "name": "Самарская Лука",
     "region": "Самарская область",
-    "date": "2025-07-20",
+    "date": "2024-07-20",
+    "season": "summer",
     "source": "provided",
     "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_03.gpx"
   },
   {
     "id": "route_04",
-    "name": "Сокские осенние тропы",
+    "name": "Самарская Лука",
     "region": "Самарская область",
-    "date": "2025-10-05",
+    "date": "2024-10-20",
+    "season": "autumn",
     "source": "provided",
     "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_04.gpx"
   },
   {
     "id": "route_05",
-    "name": "Ульяновский весенний маршрут",
-    "region": "Ульяновская область",
-    "date": "2025-05-18",
-    "source": "additional",
+    "name": "Кинельский маршрут",
+    "region": "Самарская область",
+    "date": "2024-01-20",
+    "season": "winter",
+    "source": "provided",
     "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_05.gpx"
   },
   {
     "id": "route_06",
-    "name": "Бузулукский летний маршрут",
-    "region": "Оренбургская область",
-    "date": "2025-08-09",
-    "source": "additional",
+    "name": "Кинельский маршрут",
+    "region": "Самарская область",
+    "date": "2024-04-20",
+    "season": "spring",
+    "source": "provided",
     "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_06.gpx"
+  },
+  {
+    "id": "route_07",
+    "name": "Кинельский маршрут",
+    "region": "Самарская область",
+    "date": "2024-07-20",
+    "season": "summer",
+    "source": "provided",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_07.gpx"
+  },
+  {
+    "id": "route_08",
+    "name": "Кинельский маршрут",
+    "region": "Самарская область",
+    "date": "2024-10-20",
+    "season": "autumn",
+    "source": "provided",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_08.gpx"
+  },
+  {
+    "id": "route_09",
+    "name": "Бузулукский бор",
+    "region": "Оренбургская область",
+    "date": "2024-01-20",
+    "season": "winter",
+    "source": "provided",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_09.gpx"
+  },
+  {
+    "id": "route_10",
+    "name": "Бузулукский бор",
+    "region": "Оренбургская область",
+    "date": "2024-04-20",
+    "season": "spring",
+    "source": "provided",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_10.gpx"
+  },
+  {
+    "id": "route_11",
+    "name": "Бузулукский бор",
+    "region": "Оренбургская область",
+    "date": "2024-07-20",
+    "season": "summer",
+    "source": "provided",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_11.gpx"
+  },
+  {
+    "id": "route_12",
+    "name": "Бузулукский бор",
+    "region": "Оренбургская область",
+    "date": "2024-10-20",
+    "season": "autumn",
+    "source": "provided",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_12.gpx"
+  },
+  {
+    "id": "route_13",
+    "name": "Ульяновская Волга",
+    "region": "Ульяновская область",
+    "date": "2025-02-15",
+    "season": "winter",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_13.gpx"
+  },
+  {
+    "id": "route_14",
+    "name": "Ульяновская Волга",
+    "region": "Ульяновская область",
+    "date": "2025-05-15",
+    "season": "spring",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_14.gpx"
+  },
+  {
+    "id": "route_15",
+    "name": "Ульяновская Волга",
+    "region": "Ульяновская область",
+    "date": "2025-08-15",
+    "season": "summer",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_15.gpx"
+  },
+  {
+    "id": "route_16",
+    "name": "Ульяновская Волга",
+    "region": "Ульяновская область",
+    "date": "2025-11-15",
+    "season": "autumn",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_16.gpx"
+  },
+  {
+    "id": "route_17",
+    "name": "Казанское Поволжье",
+    "region": "Республика Татарстан",
+    "date": "2025-02-25",
+    "season": "winter",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_17.gpx"
+  },
+  {
+    "id": "route_18",
+    "name": "Казанское Поволжье",
+    "region": "Республика Татарстан",
+    "date": "2025-05-25",
+    "season": "spring",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_18.gpx"
+  },
+  {
+    "id": "route_19",
+    "name": "Казанское Поволжье",
+    "region": "Республика Татарстан",
+    "date": "2025-08-25",
+    "season": "summer",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_19.gpx"
+  },
+  {
+    "id": "route_20",
+    "name": "Казанское Поволжье",
+    "region": "Республика Татарстан",
+    "date": "2025-11-25",
+    "season": "autumn",
+    "source": "additional",
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_20.gpx"
   }
 ]
