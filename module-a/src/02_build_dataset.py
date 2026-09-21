@@ -231,6 +231,7 @@ def main():
                     "track_id": item["id"],
                     "track_name": item["name"],
                     "source": item["source"],
+                    "popularity_score": item.get("popularity_score"),
                     "date": item["date"],
                     "region": item["region"],
                     "point_index": point["point_index"],
