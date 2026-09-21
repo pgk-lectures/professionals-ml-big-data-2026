@@ -8,7 +8,11 @@ from common import MAPS_DIR, MODULE_DIR, TRACKS_DIR, WORK_DIR, db_config, load_m
 
 def main():
     df = pd.read_csv(WORK_DIR / "dataset.csv")
-    manifest = load_manifest()
+    manifest = [
+        item
+        for item in load_manifest()
+        if (TRACKS_DIR / f"{item['id']}.gpx").exists()
+    ]
 
     with psycopg2.connect(**db_config()) as conn:
         with conn.cursor() as cur:
