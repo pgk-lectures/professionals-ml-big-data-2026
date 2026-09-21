@@ -39,7 +39,13 @@ def main():
     dt = pd.to_datetime(df["timestamp"], errors="coerce", utc=True)
 
     df["month"] = dt.dt.month
+    df["hour"] = dt.dt.hour
     df["season"] = df["month"].map(lambda x: season(int(x)) if pd.notna(x) else "unknown")
+    df["time_of_day"] = pd.cut(
+        df["hour"],
+        bins=[-1, 5, 11, 17, 23],
+        labels=["night", "morning", "day", "evening"],
+    )
     df["elevation_band"] = pd.cut(
         df["elevation"],
         bins=[-np.inf, 100, 200, 400, np.inf],
@@ -49,8 +55,9 @@ def main():
     enriched = WORK_DIR / "dataset_enriched.csv"
     df.to_csv(enriched, index=False)
 
-    numeric_cols = ["cadence", "elevation", "temperature"]
-    corr = df[numeric_cols].corr(numeric_only=True)
+    correlation_cols = ["latitude", "longitude", "cadence", "elevation", "temperature", "hour"]
+    distribution_cols = ["cadence", "elevation", "temperature"]
+    corr = df[correlation_cols].corr(numeric_only=True)
 
     fig, ax = plt.subplots(figsize=(6, 5))
     image = ax.imshow(corr.values, vmin=-1, vmax=1)
@@ -68,25 +75,31 @@ def main():
 
 | Поле | Расшифровка | Единицы | Назначение |
 |---|---|---|---|
-| track_id | идентификатор маршрута | — | связь точек одного трека |
+| track_id | идентификатор конкретного прохождения маршрута | — | связь точек одного трека |
+| track_name | название маршрута | — | группировка повторных прохождений одного маршрута |
+| source | тип источника: provided/additional | категория | отделяет исходные треки от добавленных |
 | date | дата маршрута | дата | сезонность |
 | region | регион | — | географическая группировка |
+| point_index | порядковый номер точки в треке | номер | уникальность и порядок точек |
+| timestamp | дата и время GPS-точки | UTC | анализ времени суток и погоды |
 | latitude | широта | градусы | координата |
 | longitude | долгота | градусы | координата |
 | cadence | частота шагов | шаг/мин | активность туриста |
 | elevation | высота над уровнем моря | м | характеристика рельефа |
 | temperature | температура воздуха | °C | погодные условия |
 | terrain_type | тип местности | категория | характеристика окружения |
-| nearby_objects | объекты в радиусе 500 м | список | контекст точки |
-| month | месяц | 1–12 | всесезонность |
+| nearby_objects | объекты в радиусе 500 м | список | географический контекст точки |
+| month | месяц | 1–12 | сезонная аналитика |
+| hour | час суток | 0–23 | анализ температуры и активности по времени суток |
 | season | сезон | категория | всесезонность |
+| time_of_day | часть суток | категория | фильтрация и аналитика в модуле Б |
 | elevation_band | высотная категория | категория | упрощённая характеристика рельефа |
 """
     (WORK_DIR / "data_dictionary.md").write_text(dictionary, encoding="utf-8")
 
     conclusions = ["# Проверка распределений", ""]
 
-    for column in numeric_cols:
+    for column in distribution_cols:
         values = pd.to_numeric(df[column], errors="coerce").dropna()
         if values.empty:
             continue
