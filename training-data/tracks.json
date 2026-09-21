@@ -6,7 +6,8 @@
     "date": "2024-01-20",
     "season": "winter",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_01.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_01.gpx",
+    "popularity_score": 65
   },
   {
     "id": "route_02",
@@ -15,7 +16,8 @@
     "date": "2024-04-20",
     "season": "spring",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_02.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_02.gpx",
+    "popularity_score": 82
   },
   {
     "id": "route_03",
@@ -24,7 +26,8 @@
     "date": "2024-07-20",
     "season": "summer",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_03.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_03.gpx",
+    "popularity_score": 96
   },
   {
     "id": "route_04",
@@ -33,7 +36,8 @@
     "date": "2024-10-20",
     "season": "autumn",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_04.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_04.gpx",
+    "popularity_score": 87
   },
   {
     "id": "route_05",
@@ -42,7 +46,8 @@
     "date": "2024-01-20",
     "season": "winter",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_05.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_05.gpx",
+    "popularity_score": 48
   },
   {
     "id": "route_06",
@@ -51,7 +56,8 @@
     "date": "2024-04-20",
     "season": "spring",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_06.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_06.gpx",
+    "popularity_score": 61
   },
   {
     "id": "route_07",
@@ -60,7 +66,8 @@
     "date": "2024-07-20",
     "season": "summer",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_07.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_07.gpx",
+    "popularity_score": 72
   },
   {
     "id": "route_08",
@@ -69,7 +76,8 @@
     "date": "2024-10-20",
     "season": "autumn",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_08.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_08.gpx",
+    "popularity_score": 58
   },
   {
     "id": "route_09",
@@ -78,7 +86,8 @@
     "date": "2024-01-20",
     "season": "winter",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_09.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_09.gpx",
+    "popularity_score": 52
   },
   {
     "id": "route_10",
@@ -87,7 +96,8 @@
     "date": "2024-04-20",
     "season": "spring",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_10.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_10.gpx",
+    "popularity_score": 69
   },
   {
     "id": "route_11",
@@ -96,7 +106,8 @@
     "date": "2024-07-20",
     "season": "summer",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_11.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_11.gpx",
+    "popularity_score": 89
   },
   {
     "id": "route_12",
@@ -105,7 +116,8 @@
     "date": "2024-10-20",
     "season": "autumn",
     "source": "provided",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_12.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_12.gpx",
+    "popularity_score": 63
   },
   {
     "id": "route_13",
@@ -114,7 +126,8 @@
     "date": "2025-02-15",
     "season": "winter",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_13.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_13.gpx",
+    "popularity_score": 57
   },
   {
     "id": "route_14",
@@ -123,7 +136,8 @@
     "date": "2025-05-15",
     "season": "spring",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_14.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_14.gpx",
+    "popularity_score": 74
   },
   {
     "id": "route_15",
@@ -132,7 +146,8 @@
     "date": "2025-08-15",
     "season": "summer",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_15.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_15.gpx",
+    "popularity_score": 84
   },
   {
     "id": "route_16",
@@ -141,7 +156,8 @@
     "date": "2025-11-15",
     "season": "autumn",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_16.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_16.gpx",
+    "popularity_score": 71
   },
   {
     "id": "route_17",
@@ -150,7 +166,8 @@
     "date": "2025-02-25",
     "season": "winter",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_17.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_17.gpx",
+    "popularity_score": 78
   },
   {
     "id": "route_18",
@@ -159,7 +176,8 @@
     "date": "2025-05-25",
     "season": "spring",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_18.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_18.gpx",
+    "popularity_score": 91
   },
   {
     "id": "route_19",
@@ -168,7 +186,8 @@
     "date": "2025-08-25",
     "season": "summer",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_19.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_19.gpx",
+    "popularity_score": 99
   },
   {
     "id": "route_20",
@@ -177,6 +196,7 @@
     "date": "2025-11-25",
     "season": "autumn",
     "source": "additional",
-    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_20.gpx"
+    "url": "https://raw.githubusercontent.com/pgk-lectures/professionals-ml-big-data-2026/main/training-data/tracks/route_20.gpx",
+    "popularity_score": 94
   }
 ]
