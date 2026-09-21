@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Сокские осенние тропы</name></metadata>
+  <trk>
+    <name>Сокские осенние тропы</name>
+    <trkseg>
+      <trkpt lat="53.480000" lon="50.143000">
+        <ele>82</ele>
+        <time>2025-10-05T07:00:00Z</time>
+        <extensions><cadence>108</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.483400" lon="50.147300">
+        <ele>88</ele>
+        <time>2025-10-05T07:10:00Z</time>
+        <extensions><cadence>109</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.486700" lon="50.151700">
+        <ele>95</ele>
+        <time>2025-10-05T07:20:00Z</time>
+        <extensions><cadence>111</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.490100" lon="50.156000">
+        <ele>104</ele>
+        <time>2025-10-05T07:30:00Z</time>
+        <extensions><cadence>110</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.493500" lon="50.160400">
+        <ele>111</ele>
+        <time>2025-10-05T07:40:00Z</time>
+        <extensions><cadence>106</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.496800" lon="50.164800">
+        <ele>118</ele>
+        <time>2025-10-05T07:50:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.500200" lon="50.169100">
+        <ele>125</ele>
+        <time>2025-10-05T08:00:00Z</time>
+        <extensions><cadence>102</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.503500" lon="50.173500">
+        <ele>132</ele>
+        <time>2025-10-05T08:10:00Z</time>
+        <extensions><cadence>100</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
