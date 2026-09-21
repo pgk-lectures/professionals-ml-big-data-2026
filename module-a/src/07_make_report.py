@@ -12,7 +12,7 @@ def main():
     map_files = sorted(p.name for p in MAPS_DIR.glob("*.png"))
     aug_files = sorted(p.name for p in AUG_DIR.glob("*.png"))
 
-    sample = dataset.head(8).to_markdown(index=False)
+    sample = dataset.head(8).to_csv(index=False)
 
     text = f"""# Отчёт по модулю А
 
@@ -47,7 +47,9 @@ def main():
 
 ## 5. Пример данных
 
+~~~csv
 {sample}
+~~~
 
 ## 6. Карты
 
