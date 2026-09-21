@@ -1,49 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="pgk-lectures-training"
      xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Сокские осенние тропы</name></metadata>
+  <metadata><name>Самарская Лука</name></metadata>
   <trk>
-    <name>Сокские осенние тропы</name>
+    <name>Самарская Лука</name>
     <trkseg>
-      <trkpt lat="53.480000" lon="50.143000">
-        <ele>82</ele>
-        <time>2025-10-05T07:00:00Z</time>
-        <extensions><cadence>108</cadence></extensions>
+      <trkpt lat="53.402150" lon="49.926250">
+        <ele>125</ele>
+        <time>2024-10-20T07:00:00Z</time>
+        <extensions><cadence>107</cadence></extensions>
       </trkpt>
-      <trkpt lat="53.483400" lon="50.147300">
-        <ele>88</ele>
-        <time>2025-10-05T07:10:00Z</time>
-        <extensions><cadence>109</cadence></extensions>
-      </trkpt>
-      <trkpt lat="53.486700" lon="50.151700">
-        <ele>95</ele>
-        <time>2025-10-05T07:20:00Z</time>
-        <extensions><cadence>111</cadence></extensions>
-      </trkpt>
-      <trkpt lat="53.490100" lon="50.156000">
-        <ele>104</ele>
-        <time>2025-10-05T07:30:00Z</time>
-        <extensions><cadence>110</cadence></extensions>
-      </trkpt>
-      <trkpt lat="53.493500" lon="50.160400">
-        <ele>111</ele>
-        <time>2025-10-05T07:40:00Z</time>
+      <trkpt lat="53.402727" lon="49.926762">
+        <ele>132</ele>
+        <time>2024-10-20T07:06:00Z</time>
         <extensions><cadence>106</cadence></extensions>
       </trkpt>
-      <trkpt lat="53.496800" lon="50.164800">
-        <ele>118</ele>
-        <time>2025-10-05T07:50:00Z</time>
+      <trkpt lat="53.403284" lon="49.927289">
+        <ele>139</ele>
+        <time>2024-10-20T07:12:00Z</time>
         <extensions><cadence>104</cadence></extensions>
       </trkpt>
-      <trkpt lat="53.500200" lon="50.169100">
-        <ele>125</ele>
-        <time>2025-10-05T08:00:00Z</time>
+      <trkpt lat="53.403805" lon="49.927839">
+        <ele>145</ele>
+        <time>2024-10-20T07:18:00Z</time>
         <extensions><cadence>102</cadence></extensions>
       </trkpt>
-      <trkpt lat="53.503500" lon="50.173500">
-        <ele>132</ele>
-        <time>2025-10-05T08:10:00Z</time>
+      <trkpt lat="53.404283" lon="49.928421">
+        <ele>150</ele>
+        <time>2024-10-20T07:24:00Z</time>
         <extensions><cadence>100</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.404718" lon="49.929032">
+        <ele>153</ele>
+        <time>2024-10-20T07:30:00Z</time>
+        <extensions><cadence>98</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.405119" lon="49.929668">
+        <ele>156</ele>
+        <time>2024-10-20T07:36:00Z</time>
+        <extensions><cadence>97</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.405501" lon="49.930316">
+        <ele>158</ele>
+        <time>2024-10-20T07:42:00Z</time>
+        <extensions><cadence>96</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.405886" lon="49.930963">
+        <ele>161</ele>
+        <time>2024-10-20T07:48:00Z</time>
+        <extensions><cadence>96</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.406291" lon="49.931595">
+        <ele>165</ele>
+        <time>2024-10-20T07:54:00Z</time>
+        <extensions><cadence>97</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.406733" lon="49.932202">
+        <ele>170</ele>
+        <time>2024-10-20T08:00:00Z</time>
+        <extensions><cadence>98</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.407219" lon="49.932778">
+        <ele>176</ele>
+        <time>2024-10-20T08:06:00Z</time>
+        <extensions><cadence>98</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.407748" lon="49.933323">
+        <ele>184</ele>
+        <time>2024-10-20T08:12:00Z</time>
+        <extensions><cadence>98</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.408310" lon="49.933846">
+        <ele>191</ele>
+        <time>2024-10-20T08:18:00Z</time>
+        <extensions><cadence>98</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.408888" lon="49.934358">
+        <ele>198</ele>
+        <time>2024-10-20T08:24:00Z</time>
+        <extensions><cadence>96</cadence></extensions>
       </trkpt>
     </trkseg>
   </trk>
