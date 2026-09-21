@@ -588,6 +588,14 @@ work/correlation.png
 work/dataset_enriched.csv
 ~~~
 
+После этого обновляем PostgreSQL уже **обогащённой версией датасета**:
+
+~~~bash
+python src/04_load_db.py
+~~~
+
+Скрипт автоматически увидит `dataset_enriched.csv` и через тот же UPSERT добавит в существующие строки сезон, время суток и дополнительные признаки. Дубликатов при этом не появится.
+
 ## Зачем нужна всесезонность
 
 Один и тот же маршрут зимой и летом имеет разные условия. Поэтому добавляем признаки, которые явно описывают сезон и позволяют следующим модулям учитывать время года.
@@ -688,8 +696,8 @@ python src/01_download_tracks.py --source additional
 ~~~bash
 python src/02_build_dataset.py
 python src/03_make_maps.py
-python src/04_load_db.py
 python src/05_analyze_features.py
+python src/04_load_db.py
 ~~~
 
 Почему мы запускаем эти этапы повторно:
