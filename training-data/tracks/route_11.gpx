@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Бузулукский бор</name></metadata>
+  <trk>
+    <name>Бузулукский бор</name>
+    <trkseg>
+      <trkpt lat="52.780160" lon="52.240160">
+        <ele>78</ele>
+        <time>2024-07-20T06:30:00Z</time>
+        <extensions><cadence>120</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.780737" lon="52.240672">
+        <ele>82</ele>
+        <time>2024-07-20T06:36:00Z</time>
+        <extensions><cadence>119</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.781294" lon="52.241199">
+        <ele>86</ele>
+        <time>2024-07-20T06:42:00Z</time>
+        <extensions><cadence>117</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.781815" lon="52.241749">
+        <ele>89</ele>
+        <time>2024-07-20T06:48:00Z</time>
+        <extensions><cadence>115</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.782293" lon="52.242331">
+        <ele>91</ele>
+        <time>2024-07-20T06:54:00Z</time>
+        <extensions><cadence>113</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.782728" lon="52.242942">
+        <ele>91</ele>
+        <time>2024-07-20T07:00:00Z</time>
+        <extensions><cadence>111</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.783129" lon="52.243578">
+        <ele>91</ele>
+        <time>2024-07-20T07:06:00Z</time>
+        <extensions><cadence>110</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.783511" lon="52.244226">
+        <ele>90</ele>
+        <time>2024-07-20T07:12:00Z</time>
+        <extensions><cadence>109</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.783896" lon="52.244873">
+        <ele>90</ele>
+        <time>2024-07-20T07:18:00Z</time>
+        <extensions><cadence>109</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.784301" lon="52.245505">
+        <ele>91</ele>
+        <time>2024-07-20T07:24:00Z</time>
+        <extensions><cadence>110</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.784743" lon="52.246112">
+        <ele>93</ele>
+        <time>2024-07-20T07:30:00Z</time>
+        <extensions><cadence>111</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.785229" lon="52.246688">
+        <ele>96</ele>
+        <time>2024-07-20T07:36:00Z</time>
+        <extensions><cadence>111</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.785758" lon="52.247233">
+        <ele>101</ele>
+        <time>2024-07-20T07:42:00Z</time>
+        <extensions><cadence>111</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.786320" lon="52.247756">
+        <ele>105</ele>
+        <time>2024-07-20T07:48:00Z</time>
+        <extensions><cadence>111</cadence></extensions>
+      </trkpt>
+      <trkpt lat="52.786898" lon="52.248268">
+        <ele>109</ele>
+        <time>2024-07-20T07:54:00Z</time>
+        <extensions><cadence>109</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
