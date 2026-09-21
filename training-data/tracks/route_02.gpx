@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="pgk-lectures-training"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata><name>Самарская Лука весной</name></metadata>
+  <trk>
+    <name>Самарская Лука весной</name>
+    <trkseg>
+      <trkpt lat="53.376000" lon="49.764000">
+        <ele>92</ele>
+        <time>2025-04-10T09:00:00Z</time>
+        <extensions><cadence>112</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.379400" lon="49.768100">
+        <ele>101</ele>
+        <time>2025-04-10T09:10:00Z</time>
+        <extensions><cadence>114</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.382800" lon="49.772500">
+        <ele>113</ele>
+        <time>2025-04-10T09:20:00Z</time>
+        <extensions><cadence>116</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.386200" lon="49.776800">
+        <ele>124</ele>
+        <time>2025-04-10T09:30:00Z</time>
+        <extensions><cadence>113</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.389700" lon="49.781200">
+        <ele>136</ele>
+        <time>2025-04-10T09:40:00Z</time>
+        <extensions><cadence>109</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.393100" lon="49.785700">
+        <ele>149</ele>
+        <time>2025-04-10T09:50:00Z</time>
+        <extensions><cadence>107</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.396300" lon="49.790100">
+        <ele>158</ele>
+        <time>2025-04-10T10:00:00Z</time>
+        <extensions><cadence>105</cadence></extensions>
+      </trkpt>
+      <trkpt lat="53.399500" lon="49.794600">
+        <ele>166</ele>
+        <time>2025-04-10T10:10:00Z</time>
+        <extensions><cadence>104</cadence></extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
