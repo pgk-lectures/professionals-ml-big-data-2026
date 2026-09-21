@@ -107,18 +107,23 @@ def route_osm_objects(track_id: str, points):
     Один запрос Overpass на весь маршрут, затем локально отбираем
     объекты в радиусе 500 м для каждой точки.
     """
-    key = f"osm_route_{track_id}"
+    lats = [p["latitude"] for p in points]
+    lons = [p["longitude"] for p in points]
+
+    # Запас больше 500 м, чтобы не потерять объекты возле крайних точек.
+    south = min(lats) - 0.01
+    north = max(lats) + 0.01
+    west = min(lons) - 0.015
+    east = max(lons) + 0.015
+
+    # Координаты входят в ключ кэша: если GPX с тем же track_id изменится,
+    # старый ответ Overpass не будет ошибочно переиспользован.
+    key = (
+        f"osm_route_{track_id}_"
+        f"{south:.3f}_{west:.3f}_{north:.3f}_{east:.3f}"
+    )
 
     def producer():
-        lats = [p["latitude"] for p in points]
-        lons = [p["longitude"] for p in points]
-
-        # Запас больше 500 м, чтобы не потерять объекты возле крайних точек.
-        south = min(lats) - 0.01
-        north = max(lats) + 0.01
-        west = min(lons) - 0.015
-        east = max(lons) + 0.015
-
         bbox = f"{south},{west},{north},{east}"
         query = f"""
 [out:json][timeout:25];
@@ -130,7 +135,7 @@ def route_osm_objects(track_id: str, points):
   nwr({bbox})["place"];
   nwr({bbox})["amenity"="drinking_water"];
 );
-out tags center;
+out body center;
 """
         url = "https://overpass-api.de/api/interpreter?" + urlencode({"data": query})
         return get_json(url)
