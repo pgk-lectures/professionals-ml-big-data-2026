@@ -1282,9 +1282,324 @@ PY
 - внешние источники — **2 балла**;
 - окружение точки 500 м — **2 балла**.
 
+## Как написать 02_build_dataset.py самому
+
+Этот файл делает главную работу модуля А:
+
+~~~text
+GPX
+ ↓
+координаты и время
+ ↓
+внешние API
+ ↓
+погода + высота + объекты вокруг
+ ↓
+строки DataFrame
+ ↓
+dataset.csv
+~~~
+
+### 1. Подключаем библиотеки
+
+~~~python
+import json
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+
+import pandas as pd
+
+from common import parse_gpx
+~~~
+
+### 2. Пишем универсальную функцию для JSON API
+
+~~~python
+def get_json(url):
+    request = Request(
+        url,
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        return json.loads(
+            response.read().decode("utf-8")
+        )
+~~~
+
+Теперь любой внешний сервис можно вызвать так:
+
+~~~python
+data = get_json("https://...")
+~~~
+
+### 3. Получаем высоту по координатам
+
+~~~python
+def get_elevation(lat, lon):
+    query = urlencode(
+        {
+            "latitude": lat,
+            "longitude": lon,
+        }
+    )
+
+    data = get_json(
+        "https://api.open-meteo.com/v1/elevation?"
+        + query
+    )
+
+    value = data["elevation"]
+
+    if isinstance(value, list):
+        value = value[0]
+
+    return float(value)
+~~~
+
+Мы передаём координаты и получаем высоту над уровнем моря.
+
+### 4. Получаем погоду на нужную дату и час
+
+~~~python
+def get_weather(lat, lon, timestamp):
+    dt = datetime.fromisoformat(
+        timestamp.replace("Z", "+00:00")
+    )
+
+    date = dt.date().isoformat()
+
+    query = urlencode(
+        {
+            "latitude": lat,
+            "longitude": lon,
+            "start_date": date,
+            "end_date": date,
+            "hourly": (
+                "temperature_2m,"
+                "relative_humidity_2m,"
+                "precipitation,"
+                "wind_speed_10m"
+            ),
+            "timezone": "UTC",
+        }
+    )
+
+    data = get_json(
+        "https://archive-api.open-meteo.com/v1/archive?"
+        + query
+    )
+
+    hourly = data["hourly"]
+    wanted = dt.strftime("%Y-%m-%dT%H:00")
+
+    index = hourly["time"].index(wanted)
+
+    return {
+        "temperature": hourly["temperature_2m"][index],
+        "humidity": hourly["relative_humidity_2m"][index],
+        "precipitation": hourly["precipitation"][index],
+        "wind_speed": hourly["wind_speed_10m"][index],
+    }
+~~~
+
+Здесь важна связка:
+
+~~~text
+координаты + timestamp
+        ↓
+историческая погода именно в этот момент
+~~~
+
+### 5. Получаем объекты вокруг точки через Overpass
+
+Для понимания самый простой запрос выглядит так:
+
+~~~python
+def get_nearby_objects(lat, lon):
+    query = f"""
+[out:json][timeout:25];
+(
+  nwr(around:500,{lat},{lon})["natural"];
+  nwr(around:500,{lat},{lon})["landuse"];
+  nwr(around:500,{lat},{lon})["highway"];
+  nwr(around:500,{lat},{lon})["waterway"];
+  nwr(around:500,{lat},{lon})["place"];
+);
+out tags center;
+"""
+
+    url = (
+        "https://overpass-api.de/api/interpreter?"
+        + urlencode({"data": query})
+    )
+
+    data = get_json(url)
+
+    return data["elements"]
+~~~
+
+Ключевой фрагмент:
+
+~~~text
+around:500
+~~~
+
+означает «искать вокруг точки в радиусе 500 метров».
+
+> В эталонном файле репозитория запрос оптимизирован: мы получаем объекты сразу для области маршрута, а затем сами фильтруем их по 500 м. Это уменьшает количество запросов к Overpass. Для понимания логики вариант выше проще.
+
+### 6. Превращаем OSM-теги в terrain_type
+
+~~~python
+def classify_terrain(elements):
+    types = []
+    labels = []
+
+    for element in elements:
+        tags = element.get("tags", {})
+
+        if tags.get("natural") == "wetland":
+            types.append("wetland")
+
+        if (
+            tags.get("natural") == "wood"
+            or tags.get("landuse") == "forest"
+        ):
+            types.append("forest")
+
+        if (
+            "waterway" in tags
+            or tags.get("natural") == "water"
+        ):
+            types.append("water")
+
+        if "highway" in tags:
+            types.append("road")
+
+        if "place" in tags:
+            types.append("settlement")
+
+        for key in (
+            "natural",
+            "landuse",
+            "highway",
+            "waterway",
+            "place",
+        ):
+            if key in tags:
+                labels.append(
+                    f"{key}={tags[key]}"
+                )
+
+    priority = [
+        "wetland",
+        "forest",
+        "water",
+        "road",
+        "settlement",
+    ]
+
+    terrain = next(
+        (value for value in priority if value in types),
+        "other",
+    )
+
+    return terrain, ";".join(sorted(set(labels)))
+~~~
+
+Почему есть `priority`: рядом с одной точкой могут одновременно находиться лес, дорога и вода. Нам нужен один основной `terrain_type`, а полный список сохраняем отдельно в `nearby_objects`.
+
+### 7. Собираем строки датасета
+
+Главный цикл выглядит так:
+
+~~~python
+rows = []
+
+for track in tracks:
+    gpx_path = TRACKS_DIR / f"{track['id']}.gpx"
+
+    points = parse_gpx(gpx_path)
+
+    for point in points:
+        lat = point["latitude"]
+        lon = point["longitude"]
+
+        weather = get_weather(
+            lat,
+            lon,
+            point["timestamp"],
+        )
+
+        elements = get_nearby_objects(lat, lon)
+        terrain, nearby = classify_terrain(elements)
+
+        rows.append(
+            {
+                "track_id": track["id"],
+                "date": track["date"],
+                "region": track["region"],
+                "point_index": point["point_index"],
+                "timestamp": point["timestamp"],
+                "latitude": lat,
+                "longitude": lon,
+                "cadence": point["cadence"],
+                "elevation": get_elevation(lat, lon),
+                "temperature": weather["temperature"],
+                "humidity": weather["humidity"],
+                "precipitation": weather["precipitation"],
+                "wind_speed": weather["wind_speed"],
+                "terrain_type": terrain,
+                "nearby_objects": nearby,
+            }
+        )
+~~~
+
+### 8. Сохраняем Pandas DataFrame
+
+~~~python
+df = pd.DataFrame(rows)
+
+df.to_csv(
+    "work/dataset.csv",
+    index=False,
+)
+
+print(df.head())
+print("Строк:", len(df))
+~~~
+
+`DataFrame` — табличный объект Pandas.
+
+`index=False` нужен, чтобы Pandas не добавлял в CSV лишний служебный столбец 0, 1, 2, 3...
+
+### Что обязательно проверить после написания
+
 ~~~bash
 python src/02_build_dataset.py
 ~~~
+
+Затем:
+
+~~~bash
+python - <<'PY'
+import pandas as pd
+
+df = pd.read_csv("work/dataset.csv")
+
+print(df.head())
+print(df.shape)
+print(df.isna().sum())
+PY
+~~~
+
+Если `dataset.csv` появился и обязательные поля заполнены — этап работает.
+
+> Полный оптимизированный вариант лежит в `src/02_build_dataset.py` как эталон. На тренировке сначала полезно собрать упрощённую версию самостоятельно, а затем сравнить её с эталоном.
+
 
 Для каждой точки скрипт должен получить:
 
