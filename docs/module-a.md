@@ -145,6 +145,93 @@ work/
 
 ---
 
+## Что уже есть в учебном репозитории, а что будет на чемпионате
+
+Это принципиально важно.
+
+Файл вроде `src/01_download_tracks.py` **не выдаётся организаторами**. Такое имя придумали мы сами для удобства обучения.
+
+В учебном репозитории готовые файлы лежат как **эталонное решение**, чтобы после самостоятельной попытки можно было сравнить свой код с рабочим вариантом.
+
+На чемпионате участник получает задание, исходные данные/ссылки и подготовленную инфраструктуру. **Программу для выполнения задания он пишет сам.**
+
+| Файл/папка | В учебном репозитории | На чемпионате |
+|---|---|---|
+| `training-data/tracks.json` | мы подготовили тренировочный список | организаторы дадут свои исходные данные/ссылки; формат может отличаться |
+| `src/01_download_tracks.py` | готовый эталон | **пишем сами** |
+| `src/02_build_dataset.py` | готовый эталон | **пишем сами** |
+| `src/03_make_maps.py` | готовый эталон | **пишем сами** |
+| `src/04_load_db.py` | готовый эталон | **пишем сами** |
+| `src/05_analyze_features.py` | готовый эталон | **пишем сами** |
+| `src/06_augment_images.py` | готовый эталон | **пишем сами** |
+| `src/07_make_report.py` | готовый эталон | **пишем сами** |
+| `src/common.py` | наш вспомогательный файл | не обязателен; можно создать свой |
+| `sql/schema.sql` | эталон схемы БД | **пишем сами** |
+| `environment.yml` | готовый пример | **создаём сами** |
+| `run.sh` | готовый пример | **создаём сами** |
+| `compose.yml` | только для домашней тренировки | обычно не нужен, если PostgreSQL уже подготовлен площадкой |
+| `work/` | создаётся программой | программа должна создать результаты сама |
+
+То есть правильная тренировка выглядит так:
+
+~~~text
+сначала читаем критерий
+        ↓
+понимаем, какой результат нужен
+        ↓
+пишем свой код
+        ↓
+запускаем
+        ↓
+проверяем результат
+        ↓
+только потом сравниваем с эталоном в src/
+~~~
+
+### Почему файлы названы 01_, 02_, 03_...
+
+Это **не требование чемпионата**.
+
+Мы пронумеровали их только для того, чтобы порядок выполнения был очевиден:
+
+~~~text
+01_download_tracks.py
+        ↓
+02_build_dataset.py
+        ↓
+03_make_maps.py
+        ↓
+...
+~~~
+
+На чемпионате можно назвать файлы иначе. Важно, чтобы решение выполняло требования критериев.
+
+### Создаём структуру проекта сами
+
+На чемпионате можно начать с такой структуры:
+
+~~~bash
+mkdir -p src sql work/tracks work/maps work/augmented work/distributions
+touch src/common.py
+touch src/01_download_tracks.py
+touch src/02_build_dataset.py
+touch src/03_make_maps.py
+touch src/04_load_db.py
+touch src/05_analyze_features.py
+touch src/06_augment_images.py
+touch src/07_make_report.py
+touch sql/schema.sql
+touch environment.yml
+touch run.sh
+~~~
+
+`mkdir -p` создаёт каталоги.  
+`touch` создаёт пустые файлы.
+
+После этого мы не просто запускаем готовые скрипты, а **последовательно пишем каждый из них**.
+
+---
+
 # Шаг 0. Подготавливаем Python-окружение
 
 ## Что такое conda и зачем она нужна
@@ -170,6 +257,40 @@ Ubuntu
 ## Что такое environment.yml
 
 Файл `environment.yml` описывает, какие версии Python и библиотек нужны проекту. Благодаря этому одинаковое окружение можно восстановить одной командой, а не устанавливать всё вручную.
+
+### Как создать environment.yml самому
+
+На чемпионате этот файл тоже нужно создать самому.
+
+Открываем `environment.yml` и записываем:
+
+~~~yaml
+name: professionals-ml
+
+channels:
+  - defaults
+
+dependencies:
+  - python=3.11
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - pip
+  - pip:
+      - psycopg2-binary
+~~~
+
+Что здесь происходит:
+
+- `name` — имя окружения;
+- `python=3.11` — фиксируем версию Python;
+- `pandas` и `numpy` — работа с таблицами и числами;
+- `scikit-learn` — понадобится дальше для анализа и ML;
+- `matplotlib` — графики и изображения;
+- `psycopg2-binary` — Python-драйвер для подключения к PostgreSQL.
+
+Если на площадке какая-то библиотека уже установлена или доступен другой PostgreSQL-драйвер, можно адаптировать файл под фактическое окружение.
 
 ### 1. Переходим в папку модуля
 
@@ -797,6 +918,169 @@ docker compose -f compose.yml up -d
 
 Не нужно делать сложный загрузчик. Главное — чтобы программа получила список URL и автоматически скачала все файлы.
 
+## Как написать 01_download_tracks.py самому
+
+Открываем пустой файл:
+
+~~~text
+src/01_download_tracks.py
+~~~
+
+### 1. Подключаем библиотеки
+
+~~~python
+import argparse
+import json
+from pathlib import Path
+from urllib.request import Request, urlopen
+~~~
+
+Зачем они нужны:
+
+- `json` читает список маршрутов;
+- `Path` работает с путями;
+- `urlopen` выполняет HTTP-запрос;
+- `argparse` позволяет передать параметр `--source`.
+
+### 2. Находим файлы проекта
+
+~~~python
+MODULE_DIR = Path(__file__).resolve().parents[1]
+REPO_DIR = MODULE_DIR.parent
+
+MANIFEST_PATH = REPO_DIR / "training-data" / "tracks.json"
+TRACKS_DIR = MODULE_DIR / "work" / "tracks"
+
+TRACKS_DIR.mkdir(parents=True, exist_ok=True)
+~~~
+
+`__file__` — путь к текущему Python-файлу.
+
+Мы вычисляем остальные пути относительно него, поэтому код не зависит от абсолютного пути на компьютере.
+
+### 3. Читаем tracks.json
+
+~~~python
+with MANIFEST_PATH.open("r", encoding="utf-8") as file:
+    tracks = json.load(file)
+~~~
+
+После этого `tracks` — обычный список Python с маршрутами.
+
+### 4. Добавляем выбор типа маршрутов
+
+~~~python
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "--source",
+    choices=("all", "provided", "additional"),
+    default="all",
+)
+
+args = parser.parse_args()
+
+if args.source != "all":
+    tracks = [
+        track
+        for track in tracks
+        if track["source"] == args.source
+    ]
+~~~
+
+Теперь одна программа умеет:
+
+- `--source provided` — скачать исходные маршруты;
+- `--source additional` — скачать дополнительные;
+- `--source all` — скачать всё.
+
+### 5. Скачиваем каждый GPX
+
+~~~python
+for track in tracks:
+    target = TRACKS_DIR / f"{track['id']}.gpx"
+
+    request = Request(
+        track["url"],
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        target.write_bytes(response.read())
+
+    print(f"[OK] {track['id']} -> {target}")
+~~~
+
+Логика:
+
+~~~text
+URL
+ ↓
+HTTP-запрос
+ ↓
+получаем GPX
+ ↓
+сохраняем в work/tracks/
+~~~
+
+### Минимальный рабочий файл целиком
+
+~~~python
+import argparse
+import json
+from pathlib import Path
+from urllib.request import Request, urlopen
+
+
+MODULE_DIR = Path(__file__).resolve().parents[1]
+REPO_DIR = MODULE_DIR.parent
+
+MANIFEST_PATH = REPO_DIR / "training-data" / "tracks.json"
+TRACKS_DIR = MODULE_DIR / "work" / "tracks"
+
+TRACKS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--source",
+    choices=("all", "provided", "additional"),
+    default="all",
+)
+args = parser.parse_args()
+
+
+with MANIFEST_PATH.open("r", encoding="utf-8") as file:
+    tracks = json.load(file)
+
+
+if args.source != "all":
+    tracks = [
+        track
+        for track in tracks
+        if track["source"] == args.source
+    ]
+
+
+for track in tracks:
+    target = TRACKS_DIR / f"{track['id']}.gpx"
+
+    request = Request(
+        track["url"],
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        target.write_bytes(response.read())
+
+    print(f"[OK] {track['id']} -> {target}")
+
+
+print(f"Загружено: {len(tracks)}")
+~~~
+
+Теперь запускаем **написанный нами файл**:
+
 ~~~bash
 python src/01_download_tracks.py --source provided
 ~~~
@@ -853,7 +1137,113 @@ GPX — это XML. Чтобы не зависеть от отдельной б�
 
 На реальном чемпионате берите фактическую структуру предоставленных данных.
 
-Отдельной команды в этом шаге нет: разбор GPX встроен в следующий скрипт `02_build_dataset.py`. Шаг нужен, чтобы понимать, **что именно этот скрипт делает перед обращением к внешним источникам**.
+## Как самому разобрать GPX
+
+Чтобы следующий скрипт мог работать с точками маршрута, сначала пишем функцию парсинга GPX.
+
+В `src/common.py` добавляем:
+
+~~~python
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+
+def parse_gpx(path: Path):
+    root = ET.parse(path).getroot()
+
+    ns = {
+        "g": "http://www.topografix.com/GPX/1/1"
+    }
+
+    points = []
+
+    for index, node in enumerate(root.findall(".//g:trkpt", ns)):
+        lat = float(node.attrib["lat"])
+        lon = float(node.attrib["lon"])
+
+        ele_node = node.find("g:ele", ns)
+        time_node = node.find("g:time", ns)
+
+        cadence = None
+
+        for child in node.iter():
+            if child.tag.split("}")[-1].lower() == "cadence":
+                if child.text:
+                    cadence = float(child.text)
+                    break
+
+        points.append(
+            {
+                "point_index": index,
+                "latitude": lat,
+                "longitude": lon,
+                "elevation": (
+                    float(ele_node.text)
+                    if ele_node is not None
+                    else None
+                ),
+                "timestamp": (
+                    time_node.text
+                    if time_node is not None
+                    else None
+                ),
+                "cadence": cadence,
+            }
+        )
+
+    return points
+~~~
+
+### Что здесь происходит
+
+`ElementTree` читает XML.
+
+Строка:
+
+~~~python
+root.findall(".//g:trkpt", ns)
+~~~
+
+находит все элементы `trkpt` — GPS-точки.
+
+Из атрибутов:
+
+~~~xml
+<trkpt lat="53.4021" lon="49.9262">
+~~~
+
+берём широту и долготу.
+
+Из вложенных элементов:
+
+~~~xml
+<ele>125</ele>
+<time>2025-01-15T08:00:00Z</time>
+~~~
+
+берём высоту и время.
+
+`point_index` создаём сами: 0, 1, 2, 3... Он пригодится для уникального ключа в БД.
+
+### Проверяем парсер отдельно
+
+До обращения к API полезно убедиться, что GPX вообще читается:
+
+~~~bash
+python - <<'PY'
+from pathlib import Path
+from src.common import parse_gpx
+
+points = parse_gpx(Path("work/tracks/route_01.gpx"))
+
+print("Точек:", len(points))
+print(points[0])
+PY
+~~~
+
+Если видим координаты, время, высоту и cadence — парсер работает.
+
+Отдельной команды в самом шаге нет: этот парсер потом будет вызван из `02_build_dataset.py`.
 
 ---
 
@@ -892,9 +1282,324 @@ GPX — это XML. Чтобы не зависеть от отдельной б�
 - внешние источники — **2 балла**;
 - окружение точки 500 м — **2 балла**.
 
+## Как написать 02_build_dataset.py самому
+
+Этот файл делает главную работу модуля А:
+
+~~~text
+GPX
+ ↓
+координаты и время
+ ↓
+внешние API
+ ↓
+погода + высота + объекты вокруг
+ ↓
+строки DataFrame
+ ↓
+dataset.csv
+~~~
+
+### 1. Подключаем библиотеки
+
+~~~python
+import json
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+
+import pandas as pd
+
+from common import parse_gpx
+~~~
+
+### 2. Пишем универсальную функцию для JSON API
+
+~~~python
+def get_json(url):
+    request = Request(
+        url,
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        return json.loads(
+            response.read().decode("utf-8")
+        )
+~~~
+
+Теперь любой внешний сервис можно вызвать так:
+
+~~~python
+data = get_json("https://...")
+~~~
+
+### 3. Получаем высоту по координатам
+
+~~~python
+def get_elevation(lat, lon):
+    query = urlencode(
+        {
+            "latitude": lat,
+            "longitude": lon,
+        }
+    )
+
+    data = get_json(
+        "https://api.open-meteo.com/v1/elevation?"
+        + query
+    )
+
+    value = data["elevation"]
+
+    if isinstance(value, list):
+        value = value[0]
+
+    return float(value)
+~~~
+
+Мы передаём координаты и получаем высоту над уровнем моря.
+
+### 4. Получаем погоду на нужную дату и час
+
+~~~python
+def get_weather(lat, lon, timestamp):
+    dt = datetime.fromisoformat(
+        timestamp.replace("Z", "+00:00")
+    )
+
+    date = dt.date().isoformat()
+
+    query = urlencode(
+        {
+            "latitude": lat,
+            "longitude": lon,
+            "start_date": date,
+            "end_date": date,
+            "hourly": (
+                "temperature_2m,"
+                "relative_humidity_2m,"
+                "precipitation,"
+                "wind_speed_10m"
+            ),
+            "timezone": "UTC",
+        }
+    )
+
+    data = get_json(
+        "https://archive-api.open-meteo.com/v1/archive?"
+        + query
+    )
+
+    hourly = data["hourly"]
+    wanted = dt.strftime("%Y-%m-%dT%H:00")
+
+    index = hourly["time"].index(wanted)
+
+    return {
+        "temperature": hourly["temperature_2m"][index],
+        "humidity": hourly["relative_humidity_2m"][index],
+        "precipitation": hourly["precipitation"][index],
+        "wind_speed": hourly["wind_speed_10m"][index],
+    }
+~~~
+
+Здесь важна связка:
+
+~~~text
+координаты + timestamp
+        ↓
+историческая погода именно в этот момент
+~~~
+
+### 5. Получаем объекты вокруг точки через Overpass
+
+Для понимания самый простой запрос выглядит так:
+
+~~~python
+def get_nearby_objects(lat, lon):
+    query = f"""
+[out:json][timeout:25];
+(
+  nwr(around:500,{lat},{lon})["natural"];
+  nwr(around:500,{lat},{lon})["landuse"];
+  nwr(around:500,{lat},{lon})["highway"];
+  nwr(around:500,{lat},{lon})["waterway"];
+  nwr(around:500,{lat},{lon})["place"];
+);
+out tags center;
+"""
+
+    url = (
+        "https://overpass-api.de/api/interpreter?"
+        + urlencode({"data": query})
+    )
+
+    data = get_json(url)
+
+    return data["elements"]
+~~~
+
+Ключевой фрагмент:
+
+~~~text
+around:500
+~~~
+
+означает «искать вокруг точки в радиусе 500 метров».
+
+> В эталонном файле репозитория запрос оптимизирован: мы получаем объекты сразу для области маршрута, а затем сами фильтруем их по 500 м. Это уменьшает количество запросов к Overpass. Для понимания логики вариант выше проще.
+
+### 6. Превращаем OSM-теги в terrain_type
+
+~~~python
+def classify_terrain(elements):
+    types = []
+    labels = []
+
+    for element in elements:
+        tags = element.get("tags", {})
+
+        if tags.get("natural") == "wetland":
+            types.append("wetland")
+
+        if (
+            tags.get("natural") == "wood"
+            or tags.get("landuse") == "forest"
+        ):
+            types.append("forest")
+
+        if (
+            "waterway" in tags
+            or tags.get("natural") == "water"
+        ):
+            types.append("water")
+
+        if "highway" in tags:
+            types.append("road")
+
+        if "place" in tags:
+            types.append("settlement")
+
+        for key in (
+            "natural",
+            "landuse",
+            "highway",
+            "waterway",
+            "place",
+        ):
+            if key in tags:
+                labels.append(
+                    f"{key}={tags[key]}"
+                )
+
+    priority = [
+        "wetland",
+        "forest",
+        "water",
+        "road",
+        "settlement",
+    ]
+
+    terrain = next(
+        (value for value in priority if value in types),
+        "other",
+    )
+
+    return terrain, ";".join(sorted(set(labels)))
+~~~
+
+Почему есть `priority`: рядом с одной точкой могут одновременно находиться лес, дорога и вода. Нам нужен один основной `terrain_type`, а полный список сохраняем отдельно в `nearby_objects`.
+
+### 7. Собираем строки датасета
+
+Главный цикл выглядит так:
+
+~~~python
+rows = []
+
+for track in tracks:
+    gpx_path = TRACKS_DIR / f"{track['id']}.gpx"
+
+    points = parse_gpx(gpx_path)
+
+    for point in points:
+        lat = point["latitude"]
+        lon = point["longitude"]
+
+        weather = get_weather(
+            lat,
+            lon,
+            point["timestamp"],
+        )
+
+        elements = get_nearby_objects(lat, lon)
+        terrain, nearby = classify_terrain(elements)
+
+        rows.append(
+            {
+                "track_id": track["id"],
+                "date": track["date"],
+                "region": track["region"],
+                "point_index": point["point_index"],
+                "timestamp": point["timestamp"],
+                "latitude": lat,
+                "longitude": lon,
+                "cadence": point["cadence"],
+                "elevation": get_elevation(lat, lon),
+                "temperature": weather["temperature"],
+                "humidity": weather["humidity"],
+                "precipitation": weather["precipitation"],
+                "wind_speed": weather["wind_speed"],
+                "terrain_type": terrain,
+                "nearby_objects": nearby,
+            }
+        )
+~~~
+
+### 8. Сохраняем Pandas DataFrame
+
+~~~python
+df = pd.DataFrame(rows)
+
+df.to_csv(
+    "work/dataset.csv",
+    index=False,
+)
+
+print(df.head())
+print("Строк:", len(df))
+~~~
+
+`DataFrame` — табличный объект Pandas.
+
+`index=False` нужен, чтобы Pandas не добавлял в CSV лишний служебный столбец 0, 1, 2, 3...
+
+### Что обязательно проверить после написания
+
 ~~~bash
 python src/02_build_dataset.py
 ~~~
+
+Затем:
+
+~~~bash
+python - <<'PY'
+import pandas as pd
+
+df = pd.read_csv("work/dataset.csv")
+
+print(df.head())
+print(df.shape)
+print(df.isna().sum())
+PY
+~~~
+
+Если `dataset.csv` появился и обязательные поля заполнены — этап работает.
+
+> Полный оптимизированный вариант лежит в `src/02_build_dataset.py` как эталон. На тренировке сначала полезно собрать упрощённую версию самостоятельно, а затем сравнить её с эталоном.
+
 
 Для каждой точки скрипт должен получить:
 
@@ -960,6 +1665,107 @@ Overpass хорошо помогает получить объекты вокр�
 
 Онлайн-карты состоят из небольших квадратных изображений — **тайлов**. Скрипт скачивает нужные тайлы OpenTopoMap, соединяет их, переводит GPS-координаты в координаты изображения и рисует поверх линию маршрута.
 
+## Как написать 03_make_maps.py самому
+
+Нам нужны четыре действия:
+
+~~~text
+GPS-точки
+ ↓
+определить номера тайлов
+ ↓
+скачать PNG OpenTopoMap
+ ↓
+склеить фон и нарисовать линию маршрута
+~~~
+
+Подключаем библиотеки:
+
+~~~python
+import math
+from io import BytesIO
+from urllib.request import Request, urlopen
+
+import matplotlib.pyplot as plt
+import numpy as np
+~~~
+
+Функция перевода широты/долготы в координаты Web Mercator:
+
+~~~python
+def tile_xy(lat, lon, zoom=12):
+    lat = max(min(lat, 85.05112878), -85.05112878)
+
+    n = 2 ** zoom
+    x = (lon + 180.0) / 360.0 * n
+
+    lat_rad = math.radians(lat)
+
+    y = (
+        1.0
+        - math.asinh(math.tan(lat_rad)) / math.pi
+    ) / 2.0 * n
+
+    return x, y
+~~~
+
+Скачиваем один тайл:
+
+~~~python
+def download_tile(x, y, zoom=12):
+    url = (
+        f"https://a.tile.opentopomap.org/"
+        f"{zoom}/{x}/{y}.png"
+    )
+
+    request = Request(
+        url,
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        return plt.imread(
+            BytesIO(response.read()),
+            format="png",
+        )
+~~~
+
+Дальше для всех точек маршрута:
+
+1. считаем `tile_xy`;
+2. находим минимальные/максимальные X и Y;
+3. скачиваем прямоугольник тайлов;
+4. складываем тайлы в общий NumPy-массив;
+5. переводим координаты трека в пиксели;
+6. рисуем линию через `ax.plot(...)`;
+7. сохраняем PNG через `fig.savefig(...)`.
+
+Ключевой фрагмент отрисовки:
+
+~~~python
+fig, ax = plt.subplots(figsize=(10, 8))
+
+ax.imshow(canvas)
+ax.plot(px, py, linewidth=3)
+
+ax.scatter(
+    [px[0], px[-1]],
+    [py[0], py[-1]],
+)
+
+ax.axis("off")
+
+fig.savefig(
+    "work/maps/route_01.png",
+    dpi=150,
+    bbox_inches="tight",
+)
+~~~
+
+Полная реализация вычисления границ и склейки тайлов есть в эталонном `src/03_make_maps.py`. Важно понимать именно алгоритм выше, а не запоминать формулу Web Mercator.
+
+Теперь запускаем написанный файл:
+
 ~~~bash
 python src/03_make_maps.py
 ~~~
@@ -1003,6 +1809,107 @@ CSV — удобный промежуточный файл: его легко о
 **Уникальный ключ** запрещает появление двух одинаковых точек `track_id + point_index`.
 
 **UPSERT** означает: если записи ещё нет — вставить её; если она уже есть — обновить. Поэтому повторный запуск обновляет температуру, высоту или окружение, но не создаёт копию той же точки.
+
+## Как сделать БД самому
+
+Сначала пишем `sql/schema.sql`.
+
+Минимально нужны две таблицы:
+
+~~~sql
+CREATE TABLE IF NOT EXISTS tracks (
+    track_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    region TEXT NOT NULL,
+    route_date DATE NOT NULL,
+    source TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS route_points (
+    track_id TEXT NOT NULL,
+    point_index INTEGER NOT NULL,
+    point_time TIMESTAMPTZ,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    cadence DOUBLE PRECISION,
+    elevation DOUBLE PRECISION,
+    temperature DOUBLE PRECISION,
+    terrain_type TEXT,
+    nearby_objects TEXT,
+
+    PRIMARY KEY (track_id, point_index),
+
+    FOREIGN KEY (track_id)
+        REFERENCES tracks(track_id)
+        ON DELETE CASCADE
+);
+~~~
+
+Составной `PRIMARY KEY` и есть защита от дублей.
+
+Теперь создаём `src/04_load_db.py`.
+
+Подключение:
+
+~~~python
+import os
+import pandas as pd
+import psycopg2
+
+
+conn = psycopg2.connect(
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT"),
+    dbname=os.getenv("DB_NAME"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+)
+~~~
+
+Читаем CSV:
+
+~~~python
+df = pd.read_csv("work/dataset.csv")
+~~~
+
+Создаём таблицы:
+
+~~~python
+with conn.cursor() as cur:
+    with open("sql/schema.sql", encoding="utf-8") as file:
+        cur.execute(file.read())
+
+conn.commit()
+~~~
+
+Для каждой точки выполняем UPSERT:
+
+~~~sql
+INSERT INTO route_points (
+    track_id,
+    point_index,
+    latitude,
+    longitude,
+    cadence,
+    elevation,
+    temperature,
+    terrain_type,
+    nearby_objects
+)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+
+ON CONFLICT (track_id, point_index)
+DO UPDATE SET
+    cadence = EXCLUDED.cadence,
+    elevation = EXCLUDED.elevation,
+    temperature = EXCLUDED.temperature,
+    terrain_type = EXCLUDED.terrain_type,
+    nearby_objects = EXCLUDED.nearby_objects;
+~~~
+
+В Python значения передаём отдельным кортежем, а не вставляем строкой — это безопаснее и правильно работает с типами.
+
+Полный вариант с таблицей `tracks` и всеми дополнительными признаками есть в эталонном `src/04_load_db.py`.
 
 ~~~sql
 UNIQUE (track_id, point_index)
@@ -1097,6 +2004,76 @@ PY
 
 Критерий допускает **корреляционный анализ**, поэтому используем его.
 
+## Как написать анализ признаков
+
+Открываем `src/05_analyze_features.py`.
+
+Читаем датасет:
+
+~~~python
+import pandas as pd
+
+df = pd.read_csv("work/dataset.csv")
+~~~
+
+Преобразуем время:
+
+~~~python
+dt = pd.to_datetime(
+    df["timestamp"],
+    errors="coerce",
+    utc=True,
+)
+
+df["month"] = dt.dt.month
+df["hour"] = dt.dt.hour
+~~~
+
+Создаём сезон:
+
+~~~python
+def season(month):
+    if month in (12, 1, 2):
+        return "winter"
+    if month in (3, 4, 5):
+        return "spring"
+    if month in (6, 7, 8):
+        return "summer"
+    return "autumn"
+
+
+df["season"] = df["month"].map(season)
+~~~
+
+Корреляция считается одной строкой:
+
+~~~python
+numeric = [
+    "cadence",
+    "elevation",
+    "temperature",
+    "humidity",
+    "precipitation",
+    "wind_speed",
+]
+
+corr = df[numeric].corr()
+print(corr)
+~~~
+
+Сохраняем обогащённый датасет:
+
+~~~python
+df.to_csv(
+    "work/dataset_enriched.csv",
+    index=False,
+)
+~~~
+
+Матрицу корреляции можно отрисовать Matplotlib через `imshow` — готовый пример есть в эталонном файле.
+
+Теперь запускаем:
+
 ~~~bash
 python src/05_analyze_features.py
 ~~~
@@ -1171,6 +2148,28 @@ def season(month):
 
 Строим **гистограммы**. Они показывают, как часто встречаются разные значения признака и помогают заметить скошенность, выбросы и необычную форму распределения.
 
+Как сделать одну гистограмму:
+
+~~~python
+import matplotlib.pyplot as plt
+
+values = df["temperature"].dropna()
+
+plt.hist(values, bins=10)
+plt.xlabel("temperature")
+plt.ylabel("Количество")
+plt.title("Распределение температуры")
+
+plt.savefig(
+    "work/distributions/temperature.png",
+    dpi=150,
+)
+
+plt.close()
+~~~
+
+Дальше повторяем для остальных непрерывных числовых признаков.
+
 ~~~text
 work/distributions/cadence.png
 work/distributions/elevation.png
@@ -1187,6 +2186,38 @@ work/distributions/wind_speed.png
 **Нормальное распределение** — симметричное колоколообразное распределение. Некоторые статистические методы чувствительны к форме распределения, поэтому мы должны сделать вывод: похоже ли распределение на нормальное, есть ли скошенность и нужна ли трансформация.
 
 В учебной реализации используется тест Jarque–Bera, который можно вычислить через NumPy без отдельной статистической библиотеки.
+
+Минимальная функция:
+
+~~~python
+import math
+import numpy as np
+
+
+def jarque_bera(values):
+    x = np.asarray(values, dtype=float)
+    x = x[np.isfinite(x)]
+
+    n = len(x)
+    z = (x - np.mean(x)) / np.std(x)
+
+    skew = float(np.mean(z ** 3))
+    excess = float(np.mean(z ** 4) - 3)
+
+    jb = (
+        n / 6
+        * (
+            skew ** 2
+            + excess ** 2 / 4
+        )
+    )
+
+    p_value = math.exp(-jb / 2)
+
+    return jb, p_value, skew, excess
+~~~
+
+После расчёта сохраняем не только числа, но и **словесный вывод** в `work/conclusions.md`.
 
 Проверяем именно **непрерывные числовые признаки**: частоту шагов, высоту и погодные показатели. Для категорий вроде `season` или бинарного `has_water` проверка на нормальность не имеет смысла.
 
@@ -1271,6 +2302,57 @@ python src/04_load_db.py
 
 Важно: критерий отдельно требует **сохранить географическую достоверность**. Поэтому нельзя бездумно искажать изображение так, чтобы карта перестала соответствовать реальному маршруту; в отчёте нужно объяснить, какие преобразования применялись и почему они допустимы.
 
+## Как написать аугментацию
+
+Открываем `src/06_augment_images.py`.
+
+~~~python
+import matplotlib.pyplot as plt
+import numpy as np
+from pathlib import Path
+
+
+MAPS_DIR = Path("work/maps")
+AUG_DIR = Path("work/augmented")
+
+AUG_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+
+for path in MAPS_DIR.glob("*.png"):
+    image = plt.imread(path)
+
+    rotated = np.rot90(image)
+
+    shifted = np.roll(
+        image,
+        shift=(20, 30),
+        axis=(0, 1),
+    )
+
+    bright = image.copy()
+    bright[..., :3] *= 1.15
+
+    plt.imsave(
+        AUG_DIR / f"{path.stem}_rot90.png",
+        np.clip(rotated, 0, 1),
+    )
+
+    plt.imsave(
+        AUG_DIR / f"{path.stem}_shift.png",
+        np.clip(shifted, 0, 1),
+    )
+
+    plt.imsave(
+        AUG_DIR / f"{path.stem}_bright.png",
+        np.clip(bright, 0, 1),
+    )
+~~~
+
+После написания:
+
 ~~~bash
 python src/06_augment_images.py
 ~~~
@@ -1294,6 +2376,72 @@ python src/06_augment_images.py
 Эксперт не должен разбираться во всей кодовой базе, чтобы понять результат. Отчёт коротко показывает, что реализовано, какие источники использованы, как устроена БД, какие файлы получены и какие выводы сделаны.
 
 Мы генерируем базовый отчёт скриптом, потому что это экономит время и автоматически подставляет актуальные результаты текущего запуска.
+
+## Как сделать генератор отчёта
+
+Открываем `src/07_make_report.py`.
+
+Сначала читаем результаты:
+
+~~~python
+from pathlib import Path
+import pandas as pd
+
+
+WORK_DIR = Path("work")
+
+df = pd.read_csv(
+    WORK_DIR / "dataset_enriched.csv"
+)
+
+maps = list(
+    (WORK_DIR / "maps").glob("*.png")
+)
+
+augmented = list(
+    (WORK_DIR / "augmented").glob("*.png")
+)
+~~~
+
+Формируем Markdown как обычную строку:
+
+~~~python
+report = f"""
+# Отчёт по модулю А
+
+## Результат
+
+- строк в датасете: {len(df)}
+- карт: {len(maps)}
+- аугментированных изображений: {len(augmented)}
+
+## Источники
+
+- OpenTopoMap
+- Open-Meteo
+- OpenStreetMap / Overpass API
+
+## Файлы
+
+- dataset_enriched.csv
+- correlation.png
+- data_dictionary.md
+- conclusions.md
+"""
+~~~
+
+Сохраняем:
+
+~~~python
+(WORK_DIR / "report.md").write_text(
+    report,
+    encoding="utf-8",
+)
+~~~
+
+Дальше расширяем отчёт примерами данных, структурой БД, выводами и ссылкой на легенду карты.
+
+Теперь запускаем:
 
 ~~~bash
 python src/07_make_report.py
