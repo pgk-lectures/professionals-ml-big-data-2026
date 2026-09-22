@@ -1137,7 +1137,113 @@ GPX — это XML. Чтобы не зависеть от отдельной б�
 
 На реальном чемпионате берите фактическую структуру предоставленных данных.
 
-Отдельной команды в этом шаге нет: разбор GPX встроен в следующий скрипт `02_build_dataset.py`. Шаг нужен, чтобы понимать, **что именно этот скрипт делает перед обращением к внешним источникам**.
+## Как самому разобрать GPX
+
+Чтобы следующий скрипт мог работать с точками маршрута, сначала пишем функцию парсинга GPX.
+
+В `src/common.py` добавляем:
+
+~~~python
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+
+def parse_gpx(path: Path):
+    root = ET.parse(path).getroot()
+
+    ns = {
+        "g": "http://www.topografix.com/GPX/1/1"
+    }
+
+    points = []
+
+    for index, node in enumerate(root.findall(".//g:trkpt", ns)):
+        lat = float(node.attrib["lat"])
+        lon = float(node.attrib["lon"])
+
+        ele_node = node.find("g:ele", ns)
+        time_node = node.find("g:time", ns)
+
+        cadence = None
+
+        for child in node.iter():
+            if child.tag.split("}")[-1].lower() == "cadence":
+                if child.text:
+                    cadence = float(child.text)
+                    break
+
+        points.append(
+            {
+                "point_index": index,
+                "latitude": lat,
+                "longitude": lon,
+                "elevation": (
+                    float(ele_node.text)
+                    if ele_node is not None
+                    else None
+                ),
+                "timestamp": (
+                    time_node.text
+                    if time_node is not None
+                    else None
+                ),
+                "cadence": cadence,
+            }
+        )
+
+    return points
+~~~
+
+### Что здесь происходит
+
+`ElementTree` читает XML.
+
+Строка:
+
+~~~python
+root.findall(".//g:trkpt", ns)
+~~~
+
+находит все элементы `trkpt` — GPS-точки.
+
+Из атрибутов:
+
+~~~xml
+<trkpt lat="53.4021" lon="49.9262">
+~~~
+
+берём широту и долготу.
+
+Из вложенных элементов:
+
+~~~xml
+<ele>125</ele>
+<time>2025-01-15T08:00:00Z</time>
+~~~
+
+берём высоту и время.
+
+`point_index` создаём сами: 0, 1, 2, 3... Он пригодится для уникального ключа в БД.
+
+### Проверяем парсер отдельно
+
+До обращения к API полезно убедиться, что GPX вообще читается:
+
+~~~bash
+python - <<'PY'
+from pathlib import Path
+from src.common import parse_gpx
+
+points = parse_gpx(Path("work/tracks/route_01.gpx"))
+
+print("Точек:", len(points))
+print(points[0])
+PY
+~~~
+
+Если видим координаты, время, высоту и cadence — парсер работает.
+
+Отдельной команды в самом шаге нет: этот парсер потом будет вызван из `02_build_dataset.py`.
 
 ---
 
