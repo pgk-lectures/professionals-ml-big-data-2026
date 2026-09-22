@@ -918,6 +918,169 @@ docker compose -f compose.yml up -d
 
 Не нужно делать сложный загрузчик. Главное — чтобы программа получила список URL и автоматически скачала все файлы.
 
+## Как написать 01_download_tracks.py самому
+
+Открываем пустой файл:
+
+~~~text
+src/01_download_tracks.py
+~~~
+
+### 1. Подключаем библиотеки
+
+~~~python
+import argparse
+import json
+from pathlib import Path
+from urllib.request import Request, urlopen
+~~~
+
+Зачем они нужны:
+
+- `json` читает список маршрутов;
+- `Path` работает с путями;
+- `urlopen` выполняет HTTP-запрос;
+- `argparse` позволяет передать параметр `--source`.
+
+### 2. Находим файлы проекта
+
+~~~python
+MODULE_DIR = Path(__file__).resolve().parents[1]
+REPO_DIR = MODULE_DIR.parent
+
+MANIFEST_PATH = REPO_DIR / "training-data" / "tracks.json"
+TRACKS_DIR = MODULE_DIR / "work" / "tracks"
+
+TRACKS_DIR.mkdir(parents=True, exist_ok=True)
+~~~
+
+`__file__` — путь к текущему Python-файлу.
+
+Мы вычисляем остальные пути относительно него, поэтому код не зависит от абсолютного пути на компьютере.
+
+### 3. Читаем tracks.json
+
+~~~python
+with MANIFEST_PATH.open("r", encoding="utf-8") as file:
+    tracks = json.load(file)
+~~~
+
+После этого `tracks` — обычный список Python с маршрутами.
+
+### 4. Добавляем выбор типа маршрутов
+
+~~~python
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "--source",
+    choices=("all", "provided", "additional"),
+    default="all",
+)
+
+args = parser.parse_args()
+
+if args.source != "all":
+    tracks = [
+        track
+        for track in tracks
+        if track["source"] == args.source
+    ]
+~~~
+
+Теперь одна программа умеет:
+
+- `--source provided` — скачать исходные маршруты;
+- `--source additional` — скачать дополнительные;
+- `--source all` — скачать всё.
+
+### 5. Скачиваем каждый GPX
+
+~~~python
+for track in tracks:
+    target = TRACKS_DIR / f"{track['id']}.gpx"
+
+    request = Request(
+        track["url"],
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        target.write_bytes(response.read())
+
+    print(f"[OK] {track['id']} -> {target}")
+~~~
+
+Логика:
+
+~~~text
+URL
+ ↓
+HTTP-запрос
+ ↓
+получаем GPX
+ ↓
+сохраняем в work/tracks/
+~~~
+
+### Минимальный рабочий файл целиком
+
+~~~python
+import argparse
+import json
+from pathlib import Path
+from urllib.request import Request, urlopen
+
+
+MODULE_DIR = Path(__file__).resolve().parents[1]
+REPO_DIR = MODULE_DIR.parent
+
+MANIFEST_PATH = REPO_DIR / "training-data" / "tracks.json"
+TRACKS_DIR = MODULE_DIR / "work" / "tracks"
+
+TRACKS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--source",
+    choices=("all", "provided", "additional"),
+    default="all",
+)
+args = parser.parse_args()
+
+
+with MANIFEST_PATH.open("r", encoding="utf-8") as file:
+    tracks = json.load(file)
+
+
+if args.source != "all":
+    tracks = [
+        track
+        for track in tracks
+        if track["source"] == args.source
+    ]
+
+
+for track in tracks:
+    target = TRACKS_DIR / f"{track['id']}.gpx"
+
+    request = Request(
+        track["url"],
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        target.write_bytes(response.read())
+
+    print(f"[OK] {track['id']} -> {target}")
+
+
+print(f"Загружено: {len(tracks)}")
+~~~
+
+Теперь запускаем **написанный нами файл**:
+
 ~~~bash
 python src/01_download_tracks.py --source provided
 ~~~
