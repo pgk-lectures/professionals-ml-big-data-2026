@@ -1665,6 +1665,107 @@ Overpass хорошо помогает получить объекты вокр�
 
 Онлайн-карты состоят из небольших квадратных изображений — **тайлов**. Скрипт скачивает нужные тайлы OpenTopoMap, соединяет их, переводит GPS-координаты в координаты изображения и рисует поверх линию маршрута.
 
+## Как написать 03_make_maps.py самому
+
+Нам нужны четыре действия:
+
+~~~text
+GPS-точки
+ ↓
+определить номера тайлов
+ ↓
+скачать PNG OpenTopoMap
+ ↓
+склеить фон и нарисовать линию маршрута
+~~~
+
+Подключаем библиотеки:
+
+~~~python
+import math
+from io import BytesIO
+from urllib.request import Request, urlopen
+
+import matplotlib.pyplot as plt
+import numpy as np
+~~~
+
+Функция перевода широты/долготы в координаты Web Mercator:
+
+~~~python
+def tile_xy(lat, lon, zoom=12):
+    lat = max(min(lat, 85.05112878), -85.05112878)
+
+    n = 2 ** zoom
+    x = (lon + 180.0) / 360.0 * n
+
+    lat_rad = math.radians(lat)
+
+    y = (
+        1.0
+        - math.asinh(math.tan(lat_rad)) / math.pi
+    ) / 2.0 * n
+
+    return x, y
+~~~
+
+Скачиваем один тайл:
+
+~~~python
+def download_tile(x, y, zoom=12):
+    url = (
+        f"https://a.tile.opentopomap.org/"
+        f"{zoom}/{x}/{y}.png"
+    )
+
+    request = Request(
+        url,
+        headers={"User-Agent": "professionals-training/1.0"},
+    )
+
+    with urlopen(request, timeout=30) as response:
+        return plt.imread(
+            BytesIO(response.read()),
+            format="png",
+        )
+~~~
+
+Дальше для всех точек маршрута:
+
+1. считаем `tile_xy`;
+2. находим минимальные/максимальные X и Y;
+3. скачиваем прямоугольник тайлов;
+4. складываем тайлы в общий NumPy-массив;
+5. переводим координаты трека в пиксели;
+6. рисуем линию через `ax.plot(...)`;
+7. сохраняем PNG через `fig.savefig(...)`.
+
+Ключевой фрагмент отрисовки:
+
+~~~python
+fig, ax = plt.subplots(figsize=(10, 8))
+
+ax.imshow(canvas)
+ax.plot(px, py, linewidth=3)
+
+ax.scatter(
+    [px[0], px[-1]],
+    [py[0], py[-1]],
+)
+
+ax.axis("off")
+
+fig.savefig(
+    "work/maps/route_01.png",
+    dpi=150,
+    bbox_inches="tight",
+)
+~~~
+
+Полная реализация вычисления границ и склейки тайлов есть в эталонном `src/03_make_maps.py`. Важно понимать именно алгоритм выше, а не запоминать формулу Web Mercator.
+
+Теперь запускаем написанный файл:
+
 ~~~bash
 python src/03_make_maps.py
 ~~~
@@ -1708,6 +1809,107 @@ CSV — удобный промежуточный файл: его легко о
 **Уникальный ключ** запрещает появление двух одинаковых точек `track_id + point_index`.
 
 **UPSERT** означает: если записи ещё нет — вставить её; если она уже есть — обновить. Поэтому повторный запуск обновляет температуру, высоту или окружение, но не создаёт копию той же точки.
+
+## Как сделать БД самому
+
+Сначала пишем `sql/schema.sql`.
+
+Минимально нужны две таблицы:
+
+~~~sql
+CREATE TABLE IF NOT EXISTS tracks (
+    track_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    region TEXT NOT NULL,
+    route_date DATE NOT NULL,
+    source TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS route_points (
+    track_id TEXT NOT NULL,
+    point_index INTEGER NOT NULL,
+    point_time TIMESTAMPTZ,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    cadence DOUBLE PRECISION,
+    elevation DOUBLE PRECISION,
+    temperature DOUBLE PRECISION,
+    terrain_type TEXT,
+    nearby_objects TEXT,
+
+    PRIMARY KEY (track_id, point_index),
+
+    FOREIGN KEY (track_id)
+        REFERENCES tracks(track_id)
+        ON DELETE CASCADE
+);
+~~~
+
+Составной `PRIMARY KEY` и есть защита от дублей.
+
+Теперь создаём `src/04_load_db.py`.
+
+Подключение:
+
+~~~python
+import os
+import pandas as pd
+import psycopg2
+
+
+conn = psycopg2.connect(
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT"),
+    dbname=os.getenv("DB_NAME"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+)
+~~~
+
+Читаем CSV:
+
+~~~python
+df = pd.read_csv("work/dataset.csv")
+~~~
+
+Создаём таблицы:
+
+~~~python
+with conn.cursor() as cur:
+    with open("sql/schema.sql", encoding="utf-8") as file:
+        cur.execute(file.read())
+
+conn.commit()
+~~~
+
+Для каждой точки выполняем UPSERT:
+
+~~~sql
+INSERT INTO route_points (
+    track_id,
+    point_index,
+    latitude,
+    longitude,
+    cadence,
+    elevation,
+    temperature,
+    terrain_type,
+    nearby_objects
+)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+
+ON CONFLICT (track_id, point_index)
+DO UPDATE SET
+    cadence = EXCLUDED.cadence,
+    elevation = EXCLUDED.elevation,
+    temperature = EXCLUDED.temperature,
+    terrain_type = EXCLUDED.terrain_type,
+    nearby_objects = EXCLUDED.nearby_objects;
+~~~
+
+В Python значения передаём отдельным кортежем, а не вставляем строкой — это безопаснее и правильно работает с типами.
+
+Полный вариант с таблицей `tracks` и всеми дополнительными признаками есть в эталонном `src/04_load_db.py`.
 
 ~~~sql
 UNIQUE (track_id, point_index)
@@ -1802,6 +2004,76 @@ PY
 
 Критерий допускает **корреляционный анализ**, поэтому используем его.
 
+## Как написать анализ признаков
+
+Открываем `src/05_analyze_features.py`.
+
+Читаем датасет:
+
+~~~python
+import pandas as pd
+
+df = pd.read_csv("work/dataset.csv")
+~~~
+
+Преобразуем время:
+
+~~~python
+dt = pd.to_datetime(
+    df["timestamp"],
+    errors="coerce",
+    utc=True,
+)
+
+df["month"] = dt.dt.month
+df["hour"] = dt.dt.hour
+~~~
+
+Создаём сезон:
+
+~~~python
+def season(month):
+    if month in (12, 1, 2):
+        return "winter"
+    if month in (3, 4, 5):
+        return "spring"
+    if month in (6, 7, 8):
+        return "summer"
+    return "autumn"
+
+
+df["season"] = df["month"].map(season)
+~~~
+
+Корреляция считается одной строкой:
+
+~~~python
+numeric = [
+    "cadence",
+    "elevation",
+    "temperature",
+    "humidity",
+    "precipitation",
+    "wind_speed",
+]
+
+corr = df[numeric].corr()
+print(corr)
+~~~
+
+Сохраняем обогащённый датасет:
+
+~~~python
+df.to_csv(
+    "work/dataset_enriched.csv",
+    index=False,
+)
+~~~
+
+Матрицу корреляции можно отрисовать Matplotlib через `imshow` — готовый пример есть в эталонном файле.
+
+Теперь запускаем:
+
 ~~~bash
 python src/05_analyze_features.py
 ~~~
@@ -1876,6 +2148,28 @@ def season(month):
 
 Строим **гистограммы**. Они показывают, как часто встречаются разные значения признака и помогают заметить скошенность, выбросы и необычную форму распределения.
 
+Как сделать одну гистограмму:
+
+~~~python
+import matplotlib.pyplot as plt
+
+values = df["temperature"].dropna()
+
+plt.hist(values, bins=10)
+plt.xlabel("temperature")
+plt.ylabel("Количество")
+plt.title("Распределение температуры")
+
+plt.savefig(
+    "work/distributions/temperature.png",
+    dpi=150,
+)
+
+plt.close()
+~~~
+
+Дальше повторяем для остальных непрерывных числовых признаков.
+
 ~~~text
 work/distributions/cadence.png
 work/distributions/elevation.png
@@ -1892,6 +2186,38 @@ work/distributions/wind_speed.png
 **Нормальное распределение** — симметричное колоколообразное распределение. Некоторые статистические методы чувствительны к форме распределения, поэтому мы должны сделать вывод: похоже ли распределение на нормальное, есть ли скошенность и нужна ли трансформация.
 
 В учебной реализации используется тест Jarque–Bera, который можно вычислить через NumPy без отдельной статистической библиотеки.
+
+Минимальная функция:
+
+~~~python
+import math
+import numpy as np
+
+
+def jarque_bera(values):
+    x = np.asarray(values, dtype=float)
+    x = x[np.isfinite(x)]
+
+    n = len(x)
+    z = (x - np.mean(x)) / np.std(x)
+
+    skew = float(np.mean(z ** 3))
+    excess = float(np.mean(z ** 4) - 3)
+
+    jb = (
+        n / 6
+        * (
+            skew ** 2
+            + excess ** 2 / 4
+        )
+    )
+
+    p_value = math.exp(-jb / 2)
+
+    return jb, p_value, skew, excess
+~~~
+
+После расчёта сохраняем не только числа, но и **словесный вывод** в `work/conclusions.md`.
 
 Проверяем именно **непрерывные числовые признаки**: частоту шагов, высоту и погодные показатели. Для категорий вроде `season` или бинарного `has_water` проверка на нормальность не имеет смысла.
 
@@ -1976,6 +2302,57 @@ python src/04_load_db.py
 
 Важно: критерий отдельно требует **сохранить географическую достоверность**. Поэтому нельзя бездумно искажать изображение так, чтобы карта перестала соответствовать реальному маршруту; в отчёте нужно объяснить, какие преобразования применялись и почему они допустимы.
 
+## Как написать аугментацию
+
+Открываем `src/06_augment_images.py`.
+
+~~~python
+import matplotlib.pyplot as plt
+import numpy as np
+from pathlib import Path
+
+
+MAPS_DIR = Path("work/maps")
+AUG_DIR = Path("work/augmented")
+
+AUG_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+
+for path in MAPS_DIR.glob("*.png"):
+    image = plt.imread(path)
+
+    rotated = np.rot90(image)
+
+    shifted = np.roll(
+        image,
+        shift=(20, 30),
+        axis=(0, 1),
+    )
+
+    bright = image.copy()
+    bright[..., :3] *= 1.15
+
+    plt.imsave(
+        AUG_DIR / f"{path.stem}_rot90.png",
+        np.clip(rotated, 0, 1),
+    )
+
+    plt.imsave(
+        AUG_DIR / f"{path.stem}_shift.png",
+        np.clip(shifted, 0, 1),
+    )
+
+    plt.imsave(
+        AUG_DIR / f"{path.stem}_bright.png",
+        np.clip(bright, 0, 1),
+    )
+~~~
+
+После написания:
+
 ~~~bash
 python src/06_augment_images.py
 ~~~
@@ -1999,6 +2376,72 @@ python src/06_augment_images.py
 Эксперт не должен разбираться во всей кодовой базе, чтобы понять результат. Отчёт коротко показывает, что реализовано, какие источники использованы, как устроена БД, какие файлы получены и какие выводы сделаны.
 
 Мы генерируем базовый отчёт скриптом, потому что это экономит время и автоматически подставляет актуальные результаты текущего запуска.
+
+## Как сделать генератор отчёта
+
+Открываем `src/07_make_report.py`.
+
+Сначала читаем результаты:
+
+~~~python
+from pathlib import Path
+import pandas as pd
+
+
+WORK_DIR = Path("work")
+
+df = pd.read_csv(
+    WORK_DIR / "dataset_enriched.csv"
+)
+
+maps = list(
+    (WORK_DIR / "maps").glob("*.png")
+)
+
+augmented = list(
+    (WORK_DIR / "augmented").glob("*.png")
+)
+~~~
+
+Формируем Markdown как обычную строку:
+
+~~~python
+report = f"""
+# Отчёт по модулю А
+
+## Результат
+
+- строк в датасете: {len(df)}
+- карт: {len(maps)}
+- аугментированных изображений: {len(augmented)}
+
+## Источники
+
+- OpenTopoMap
+- Open-Meteo
+- OpenStreetMap / Overpass API
+
+## Файлы
+
+- dataset_enriched.csv
+- correlation.png
+- data_dictionary.md
+- conclusions.md
+"""
+~~~
+
+Сохраняем:
+
+~~~python
+(WORK_DIR / "report.md").write_text(
+    report,
+    encoding="utf-8",
+)
+~~~
+
+Дальше расширяем отчёт примерами данных, структурой БД, выводами и ссылкой на легенду карты.
+
+Теперь запускаем:
 
 ~~~bash
 python src/07_make_report.py
